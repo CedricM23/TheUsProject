@@ -1,0 +1,33 @@
+BEGIN TRANSACTION;
+
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS dates;
+
+CREATE TABLE users (
+	user_id UUID DEFAULT gen_random_uuid(),
+	username varchar(50) NOT NULL UNIQUE,
+	password_hash varchar(200) NOT NULL,
+	first_name varchar(50) NOT NULL,
+	last_name varchar(50) NOT NULL,
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	role varchar(50) NOT NULL,
+	CONSTRAINT PK_user PRIMARY KEY (user_id)
+);
+
+CREATE TABLE dates (
+    date_id UUID DEFAULT gen_random_uuid(),
+    user_id UUID NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    location TEXT,
+    image_of_place VARCHAR(255),
+    song VARCHAR(255),
+    article_title VARCHAR(150),
+    date_time VARCHAR(50),
+    description TEXT[],
+    scrapbook_image_caption VARCHAR(255),
+    
+    CONSTRAINT PK_date PRIMARY KEY (date_id),
+    CONSTRAINT FK_date_user FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+COMMIT TRANSACTION;
