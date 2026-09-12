@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 import { BrowserRouter, Routes, Route, Outlet } from 'react-router'
 import Navbar from './components/Navbar/Navbar'
@@ -12,61 +12,58 @@ import LogoutView from './Views/LogoutView'
 import CreateDateView from './Views/CreateDateView/CreateDateView'
 import ProtectedRoute from './components/ProtectedRoute'
 import DashboardView from './Views/DashboardView/DashboardView'
+import MediaDetailview from './Views/MediaDetailView/MediaDetailView'
 
-
-  const MainLayout = () => {
-    return (
-      <>
-        <Navbar name="TheUsProject" />
-        {/* Outlet tells React Router where to render the child routes */}
-        <Outlet />
-      </>
-    )
-  }
+const MainLayout = () => {
+  return (
+    <>
+      <Navbar name="TheUsProject" />
+      <Outlet />
+    </>
+  )
+}
 
 function App() {
-  const [user, setUser] = useState(() => getTokenFromStorage());
+  // 1. Synchronously load the user from local storage FIRST
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+
+    if (storedUser && token) {
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      return JSON.parse(storedUser);
+    }
+    return null;
+  });
+
+  // 2. Validate the token in the background using useEffect
+  useEffect(() => {
+    if (user) {
+      AuthService.getUserProfile(user.id)
+        .then(() => {
+          // Token is valid, do nothing
+        })
+        .catch((error) => {
+          // Only log the user out if the token is explicitly rejected (401)
+          // This prevents CORS or server downtime from wiping your local storage
+          if (error.response && error.response.status === 401) {
+            handleLogout();
+          } else {
+            console.error("Profile check failed, but session was kept:", error.message);
+          }
+        });
+    }
+  }, []); // The empty array ensures this check only runs once when the app mounts
 
   function handleLogin(userData) {
     setUser(userData);
   }
 
   function handleLogout() {
-    // Remove auth data from local storage
     localStorage.removeItem('user');
     localStorage.removeItem('token');
-
-    // Clear auth token from axios
     delete axios.defaults.headers.common['Authorization'];
-
-    // Clear the auth context
     setUser(null);
-  }
-
-  // When a user comes back to the app or refreshes the page, check for user/token in local storage and validate it
-  function getTokenFromStorage() {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const token = localStorage.getItem('token');
-
-    if (user && token) {
-      // Set the token in the axios default headers
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
-      // Make asynchronous API request to ensure token is still valid
-      AuthService.getUserProfile(user.id)
-        .then(() => {
-          // Token is still valid, do nothing because user is already set to state
-        })
-        .catch(() => {
-          // Token is not valid, act like user just logged out
-          handleLogout();
-        });
-
-      // Return the user object, even if it's not validated yet
-      return user;
-    }
-    // no user/token in local storage, return null
-    return null;
   }
 
   return (
@@ -76,11 +73,12 @@ function App() {
         <UserContext.Provider value={user}>
           <Routes>
             <Route element={<MainLayout />}>
-            <Route path='/' element={ user ? <DashboardView/> : ""} />
-            <Route path='/dates' element={<ProtectedRoute>< DatesView /></ProtectedRoute>} />
-            <Route path='dates/:id' element={<DateDetailView />} />
-            <Route path="/logout" element={<LogoutView onLogout={handleLogout} />} /> 
-            <Route path="/dates/new" element={<CreateDateView/>} /> 
+              <Route path='/' element={user ? <DashboardView /> : <DashboardView />} />
+              <Route path='/dates' element={<ProtectedRoute><DatesView /></ProtectedRoute>} />
+              <Route path='dates/:id' element={<DateDetailView />} />
+              <Route path="/logout" element={<LogoutView onLogout={handleLogout} />} />
+              <Route path="/:id/:type" element={< MediaDetailview />}/>
+              <Route path="/dates/new" element={<CreateDateView />} />
             </Route>
             <Route path="/login" element={<LoginView onLogin={handleLogin} />} />
           </Routes>
