@@ -21,6 +21,10 @@ const listReadApi = axios.create({
     }
 })
 
+const ScoreApi = axios.create({
+    baseURL: 'http://www.omdbapi.com'
+})
+
 export default {
     trendingToday() {
         return watchlistAPI.get('tv/airing_today');
@@ -30,6 +34,8 @@ export default {
         return watchlistAPI.get(`tv/${series_id}`)
     }, getviedosbyshow(series_id) {
         return watchlistAPI.get(`tv/${series_id}/videos`)
+    }, getviedosbymovie(MovieId){
+        return watchlistAPI.get(`/movie/${MovieId}/videos`)
     }, getTopRatedMovies() {
         return watchlistAPI.get('movie/top_rated')
     }, getPopularMovies() {
@@ -61,8 +67,20 @@ export default {
     }, DeleteItemFromList(id, body){
         return listAPI.delete(`list/${id}/items`, { data: body })
     } , GetUpcomingMovies(){
-        return watchlistAPI.get('https://api.themoviedb.org/3/movie/upcoming')
+        return watchlistAPI.get('/movie/upcoming')
     }, DiscoverShows(){
-        return watchlistAPI.get('https://api.themoviedb.org/3/discover/tv')
+        return watchlistAPI.get('/discover/tv')
+    }, GetMoviesByGenre(genreId){
+        return watchlistAPI.get(`/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_genres=${genreId}`)
+    }, GetShowsByGenre(genreId){
+        return watchlistAPI.get(`/discover/tv?include_adult=false&include_null_first_air_dates=false&language=en-US&page=1&sort_by=popularity.desc"&with_genres=${genreId}`)
+    }, GetImagesByMovieId(MovieId){
+         return watchlistAPI.get(`/movie/${MovieId}/images`)
+    }, GetScoreByMediaNameandYear(title, year){
+        return ScoreApi.get(`/?t=${encodeURIComponent(title)}&y=${year}&apikey=${import.meta.env.VITE_OMDB_API_KEY}`);
+    }, GetCreditsByMovieId(MovieId){
+        return watchlistAPI.get(`movie/${MovieId}/credits`)
+    }, GetCreditsByShowId(ShowId){
+          return watchlistAPI.get(`tv/${ShowId}/credits`)
     }
 }
