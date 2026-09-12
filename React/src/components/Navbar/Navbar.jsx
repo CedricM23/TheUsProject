@@ -45,8 +45,10 @@ export default function Navbar({ name }) {
                             <details>
                                 <summary>Watchlist</summary>
                                 <ul className="p-2 bg-base-100 w-40 z-1">
-                                    <li><a>1</a></li>
-                                    <li><a>2</a></li>
+                                    <li><a>Want to Watch</a></li>
+                                    <li><a>Currently Watching</a></li>
+                                    <li><a>Watched</a></li>
+                                    <li><a>Your Lists</a></li>
                                 </ul>
                             </details>
                         </li>
