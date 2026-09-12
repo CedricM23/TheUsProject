@@ -48,8 +48,8 @@ export default function LoginView({ onLogin }) {
         </div>
         <Notification notification={notification} clearNotification={() => setNotification(null)} />
         <form className='flex flex-col gap-2 w-100'>
-          <input type="text" id="username" value={username} size="50" required autoFocus autoComplete="username" onChange={event => setUsername(event.target.value)} className='border'/>
-          <input type="password" id="password" value={password} size="50" required onChange={event => setPassword(event.target.value)} className='border'/>
+          <input type="text" id="username" value={username} size="50" required autoFocus autoComplete="username" onChange={event => setUsername(event.target.value)} className='border' />
+          <input type="password" id="password" value={password} size="50" required onChange={event => setPassword(event.target.value)} className='border' />
           <button type="submit" className='btn'>Sign in</button>
         </form>
       </div >
