@@ -15,7 +15,7 @@ export default function DateCarousel({ dates }) {
 
     return (
         <div className="w-full">
-            <div className="flex justify-between items-center mb-4 px-4">
+            <div className="flex justify-between items-center mb-4">
                 <h1 className="text-3xl font-bold">Dates</h1>
 
                 <div className="flex gap-2 hidden md:block">
