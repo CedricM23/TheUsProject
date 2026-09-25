@@ -1,7 +1,9 @@
 BEGIN TRANSACTION;
 
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS dates;
+DROP TABLE IF EXISTS dateevents;
+DROP TABLE IF EXISTS favorites;
+DROP TABLE IF EXISTS bookmarks;
 
 CREATE TABLE users (
 	user_id UUID DEFAULT gen_random_uuid(),
@@ -9,12 +11,12 @@ CREATE TABLE users (
 	password_hash varchar(200) NOT NULL,
 	first_name varchar(50) NOT NULL,
 	last_name varchar(50) NOT NULL,
-	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 	role varchar(50) NOT NULL,
 	CONSTRAINT PK_user PRIMARY KEY (user_id)
 );
 
-CREATE TABLE dates (
+CREATE TABLE dateevents (
     date_id UUID DEFAULT gen_random_uuid(),
     user_id UUID NOT NULL,
     name VARCHAR(100) NOT NULL,
@@ -30,4 +32,28 @@ CREATE TABLE dates (
     CONSTRAINT FK_date_user FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
+CREATE TABLE favorites (
+    favorite_id SERIAL PRIMARY KEY,
+    user_id UUID NOT NULL,
+    tmdb_media_id INT NOT NULL,
+    media_type VARCHAR(10) NOT NULL,
+  
+    CONSTRAINT FK_favorites_user FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+CREATE TABLE bookmarks (
+    bookmark_id SERIAL PRIMARY KEY,
+    user_id UUID NOT NULL,
+    tmdb_media_id INT NOT NULL,
+    media_type VARCHAR(10) NOT NULL,
+  
+    CONSTRAINT FK_bookmarks_user FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+
+
+
 COMMIT TRANSACTION;
+
+
+
+
