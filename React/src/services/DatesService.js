@@ -7,8 +7,12 @@ export default {
     getDateById(id){
          return dates.find((date) => date.id == id);
     },
-    getDateBy(name){
-        return dates.find((date) => date.name == name)
+   getDateByName(name) {
+        const searchTarget = name.toLowerCase();
+        const matches = dates.filter((date) => 
+            date.name.toLowerCase().includes(searchTarget)
+        );
+        return Promise.resolve({ data: matches });
     }
     
 }
