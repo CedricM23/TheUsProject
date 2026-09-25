@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import placeholder from '../../images/placeholder.png'
 
 export default function CastandCrewCarousel({ people }) {
     const carouselRef = useRef(null);
@@ -37,14 +38,20 @@ export default function CastandCrewCarousel({ people }) {
                 ref={carouselRef}
                 className="carousel carousel-center rounded-box max-w-full space-x-4 p-4"
             >
-                {people?.map((person) => (
+                {people.map((person) => (
                     <div key={person.id} className="w-30 carousel-item flex-col items-center">
-                        <img
-                            src={`https://image.tmdb.org/t/p/w200${person.profile_path}`}
-                            alt={person.name}
-                            className="w-30 h-30 rounded-full object-cover bg-zinc-800 shadow-md mb-2"
-                            loading="lazy"
-                        />
+                        {person.profile_path ?
+                            <img
+                                src={`https://image.tmdb.org/t/p/w200${person.profile_path}`}
+                                alt={person.name}
+                                className="w-30 h-30 rounded-full object-cover bg-zinc-800 shadow-md mb-2"
+                                loading="lazy"
+                            /> :
+                            <img 
+                            className="w-30 h-30 rounded-full object-cover bg-zinc-800 shadow-md mb-2" 
+                            src={placeholder} 
+                            alt="lazy" />
+                        }
                         <h1 className="text-sm text-center font-semibold leading-tight">
                             {person.name}
                         </h1>
@@ -54,6 +61,7 @@ export default function CastandCrewCarousel({ people }) {
                     </div>
                 ))}
             </div>
+
         </div>
     );
 }
