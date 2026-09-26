@@ -14,9 +14,11 @@ import ProtectedRoute from './components/ProtectedRoute'
 import DashboardView from './Views/DashboardView/DashboardView'
 import MediaDetailview from './Views/MediaDetailView/MediaDetailView'
 import SearchResultsView from './Views/SearchResultsView/SearchResultsView'
-import FavoritesPage from './Views/FavoritesView/FavoritesView'
 import FavoritesView from './Views/FavoritesView/FavoritesView'
 import BookmarksView from './Views/BookmarksView/BookmarksView'
+import ListView from './Views/ListView/ListView'
+import UpdateDateView from './Views/UpdateDateView/UpdateDateView'
+import ProfileView from './Views/ProfileView/ProfileView'
 
 const MainLayout = () => {
   return (
@@ -86,6 +88,9 @@ function App() {
               <Route path="/search" element={<SearchResultsView />} />
               <Route path='/favorites' element={<FavoritesView/>} />
               <Route path='/watchlist' element={<BookmarksView/>} />
+              <Route path='/lists' element={<ListView/>} />
+              <Route path='/dates/edit/:id' element={<UpdateDateView/>} />
+              <Route path='/profile' element={<ProfileView/>} />
             </Route>
             <Route path="/login" element={<LoginView onLogin={handleLogin} />} />
           </Routes>
