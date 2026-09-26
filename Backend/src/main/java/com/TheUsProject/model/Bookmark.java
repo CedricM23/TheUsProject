@@ -9,7 +9,8 @@ public class Bookmark {
     private int tmdbMediaId;
     private String mediaType;
 
-    public Bookmark() {}
+    public Bookmark() {
+    }
 
     public Bookmark(int bookmarkId, UUID userId, int tmdbMediaId, String mediaType) {
         this.bookmarkId = bookmarkId;
@@ -18,17 +19,37 @@ public class Bookmark {
         this.mediaType = mediaType;
     }
 
-    public int getBookmarkId() { return bookmarkId; }
-    public void setBookmarkId(int bookmarkId) { this.bookmarkId = bookmarkId; }
+    public int getBookmarkId() {
+        return bookmarkId;
+    }
 
-    public UUID getUserId() { return userId; }
-    public void setUserId(UUID userId) { this.userId = userId; }
+    public void setBookmarkId(int bookmarkId) {
+        this.bookmarkId = bookmarkId;
+    }
 
-    public int getTmdbMediaId() { return tmdbMediaId; }
-    public void setTmdbMediaId(int tmdbMediaId) { this.tmdbMediaId = tmdbMediaId; }
+    public UUID getUserId() {
+        return userId;
+    }
 
-    public String getMediaType() { return mediaType; }
-    public void setMediaType(String mediaType) { this.mediaType = mediaType; }
+    public void setUserId(UUID userId) {
+        this.userId = userId;
+    }
+
+    public int getTmdbMediaId() {
+        return tmdbMediaId;
+    }
+
+    public void setTmdbMediaId(int tmdbMediaId) {
+        this.tmdbMediaId = tmdbMediaId;
+    }
+
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
 
     @Override
     public String toString() {
