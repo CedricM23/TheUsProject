@@ -5,7 +5,7 @@ import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight'
 export default function DateCard({ date }) {
     return (
         <article className="w-64 mb-2.5 rounded-2xl md:w-[450px] md:rounded-none">
-            <Link to={`/dates/${date.id}`} className="no-underline block">
+            <Link to={`/dates/${date.dateId}`} className="no-underline block">
                 <img
                     src={date.imageOfPlace}
                     alt={date.name}
