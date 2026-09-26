@@ -35,7 +35,7 @@ export default function Navbar({ name }) {
                         <ul tabIndex={-1} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
                             <li><Link to="/Dates">Dates</Link></li>
                             <li><Link to="/favorites">Favorites</Link></li>
-                            <li><a>Your Lists</a></li>
+                            <li><Link to="/lists">Your Lists</Link></li>
                             <li><Link to="/watchlist">Watchlist</Link></li>
                             <li><a>About Us</a></li>
                         </ul>
@@ -49,10 +49,18 @@ export default function Navbar({ name }) {
                         <li>
                             <details>
                                 <summary>Library</summary>
-                                <ul className="p-2 bg-base-100 w-40 z-1">
+                                <ul
+                                    className="p-2 bg-base-100 w-40 z-1"
+                                    onClick={(e) => {
+                                        const detailsElement = e.target.closest('details');
+                                        if (detailsElement) {
+                                            detailsElement.removeAttribute('open');
+                                        }
+                                    }}
+                                >
                                     <li><Link to="/favorites">Favorites</Link></li>
-                                    <li><a>Your Lists</a></li>
-                                     <li><Link to="/watchlist">Watchlist</Link></li>
+                                    <li><Link to="/lists">Your Lists</Link></li>
+                                    <li><Link to="/watchlist">Watchlist</Link></li>
                                 </ul>
                             </details>
                         </li>
@@ -96,25 +104,17 @@ export default function Navbar({ name }) {
                     </form>
 
                     {/* User */}
-                    {user ? <div className="dropdown dropdown-end">
+                    {user ?
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+
                             <div className="w-10 rounded-full">
-                                <img
-                                    alt="Tailwind CSS Navbar component"
-                                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                <Link to="/profile">
+                                    <img
+                                        alt="Tailwind CSS Navbar component"
+                                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                </Link>
                             </div>
                         </div>
-                        <ul tabIndex={-1} className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                            <li>
-                                <a className="justify-between">
-                                    Profile
-                                    <span className="badge">New</span>
-                                </a>
-                            </li>
-                            <li><a>Settings</a></li>
-                            <li> <Link to="/logout">Logout</Link></li>
-                        </ul>
-                    </div>
 
                         :
                         // LOGIN BUTTON
