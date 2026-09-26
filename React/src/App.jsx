@@ -79,7 +79,7 @@ function App() {
         <UserContext.Provider value={user}>
           <Routes>
             <Route element={<MainLayout />}>
-              <Route path='/' element={user ? <DashboardView /> : <DashboardView />} />
+              <Route path='/' element={user ? <DashboardView /> : "Under development"} />
               <Route path='/dates' element={<ProtectedRoute><DatesView /></ProtectedRoute>} />
               <Route path='dates/:id' element={<DateDetailView />} />
               <Route path="/logout" element={<LogoutView onLogout={handleLogout} />} />
