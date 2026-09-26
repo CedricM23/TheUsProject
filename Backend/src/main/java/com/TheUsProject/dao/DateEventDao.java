@@ -11,10 +11,10 @@ public interface DateEventDao {
     //Create
     DateEvent CreateDateEvent(UUID userId, DateEvent dateEvent); // Done
     //Read
-    // List<DateEvent> getDateEventsbyUserUUD(UUID id); //Not Started
-    DateEvent getDateEventById(UUID dateId); //Not Started
+    List<DateEvent> getDateEventsByUserId(UUID userId);
+    DateEvent getDateEventById(UUID dateId); //Done
     //Update
-    // DateEvent updaDateEvent(DateEvent dateevent); //Not Started
+    DateEvent updateDateEvent(DateEvent dateEvent);
     //Delete
     int deleteDateEventById(UUID dateId); //Done
 }
