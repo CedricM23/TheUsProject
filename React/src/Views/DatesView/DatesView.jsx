@@ -9,7 +9,7 @@ export default function DatesView() {
     const [dates, setDates] = useState([])
 
     useEffect(() => {
-        setDates(DatesService.getDates())
+       DatesService.getAllDateEvents().then(response => setDates(response.data))
     }, [])
 
     return (
