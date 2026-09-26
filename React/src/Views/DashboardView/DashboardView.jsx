@@ -22,7 +22,11 @@ export default function DashboardView() {
             (Response) => {
                 SetPopularMovies(Response.data.results);
             })
-        SetDates(DatesService.getDates());
+        DatesService.getAllDateEvents().then(
+            (Response) => {
+                SetDates(Response.data)
+            }
+        )
         ShowService.getUpcomingMovie().then(
             (Response) => {
                 SetUpcomingMovies(Response.data.results)
@@ -46,7 +50,7 @@ export default function DashboardView() {
                 SetDramaMovies(Response.data.results)
             )
         )
-         ShowService.GetMoviesByGenre(35).then(
+        ShowService.GetMoviesByGenre(35).then(
             (Response) => (
                 SetComedyMovies(Response.data.results)
             )
@@ -60,7 +64,15 @@ export default function DashboardView() {
 
     return (
         <div className="m-5 text-white flex flex-col gap-5">
-            <DateCarousel dates={dates} />
+            {dates && dates.length > 0 ? (
+                <DateCarousel dates={dates} />
+            ) : (
+                <div className="flex justify-center items-center p-8 mt-8">
+                    <p className="text-xl font-['Libre_Baskerville',_serif] text-gray-500">
+                        Save a date
+                    </p>
+                </div>
+            )}
             <MediaCarousel media={popularMovies} title="Popular Movies" type="movie" />
             <MediaCarousel media={upcomingMovies} title="Upcoming Movies" type="movie" />
             <MediaCarousel media={actionMovies} title="Action Movies" type="movie" />
