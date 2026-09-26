@@ -1,6 +1,6 @@
 import { useParams } from "react-router";
 import ShowService from "../../services/ShowService";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import MetaTag from "../../components/MetaTag/MetaTag";
 import CastandCrewCarousel from "../../components/CastandCrewCarousel/CastandCrewCarousel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,6 +13,9 @@ import { Link } from "react-router";
 import ReviewCarousel from "../../components/ReviewCarousel/ReviewCarousel";
 import FavoriteService from "../../services/FavoriteService";
 import BookmarkService from "../../services/BookmarkService";
+import ListService from "../../services/ListService";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import ComingSoonModal from "../../components/ComingSoonModal/ComingSoonModal";
 
 export default function MediaDetailview() {
     const { id, type } = useParams();
@@ -29,31 +32,28 @@ export default function MediaDetailview() {
     const [heart, setHeart] = useState(Unliked);
     const [bookmark, setBookmark] = useState(Unsaved)
     const [lists, setLists] = useState([]);
-    const [statusMessage, setStatusMessage] = useState([])
     const [similar, setSimilar] = useState([])
     const [providers, setProviders] = useState([])
     const [reviews, setReviews] = useState([])
-    const fpayload = {
-        media_type: type,
-        media_id: id,
+    const modalRef = useRef(null); // Create the ref
+    const [newListName, setNewListName] = useState("");
+
+
+    function handleClick(e) {
+        if (heart === Unliked) {
+            FavoriteService.addFavorite(id, type).then(
+                (repsonse) => {
+                    setHeart(Liked);
+                }
+            ).catch((error) => { alert("item was not added to your favorites") })
+        } else if (heart === Liked) {
+            FavoriteService.removeFavorite(id, type).then(
+                (repsonse) => {
+                    setHeart(Unliked);
+                }
+            ).catch((error) => { alert("item was not removed from your favorites") })
+        }
     }
-
-
-   function handleClick(e) {
-           if (heart === Unliked) {
-               FavoriteService.addFavorite( id, type).then(
-                   (repsonse) => {
-                       setHeart(Liked);
-                   }
-               ).catch((error) => { alert("item was not added to your favorites") })
-           } else if (heart === Liked) {
-              FavoriteService.removeFavorite(id, type).then(
-                   (repsonse) => {
-                       setHeart(Unliked);
-                   }
-               ).catch((error) => { alert("item was not removed from your favorites") })
-           }
-       }
 
     function handleBookmark() {
         if (bookmark == Unsaved) {
@@ -67,6 +67,48 @@ export default function MediaDetailview() {
                     setBookmark(Unsaved)
                 }).catch((error) => { alert("item was not removed from your Watchlist") })
         }
+    }
+
+    function handleCreateList(e) {
+        e.preventDefault();
+
+        if (!newListName.trim()) return;
+
+        ListService.createList(newListName)
+            .then((response) => {
+                setLists([...lists, response.data]);
+                setNewListName("");
+
+                // Use the ref to close the modal safely
+                if (modalRef.current) {
+                    modalRef.current.hidePopover();
+                }
+
+                alert("List created successfully!");
+            })
+            .catch((error) => {
+                console.error("Failed to create list", error);
+                alert("Could not create the list.");
+            });
+    }
+
+    function handleAddToList(listId) {
+        // We already have 'id' and 'type' from useParams()!
+
+        if (!id || !type) {
+            console.error("Missing media ID or type");
+            return;
+        }
+
+        ListService.addItemToList(listId, id, type)
+            .then((response) => {
+                alert("Successfully added to your list!");
+                document.activeElement.blur(); // Closes the dropdown
+            })
+            .catch((error) => {
+                alert("Item is already in this list or could not be added.");
+                console.error("Failed to add to list", error);
+            });
     }
 
 
@@ -189,54 +231,31 @@ export default function MediaDetailview() {
         }
 
         //All Media
-        ShowService.getlists()
-            .then((response) => {
-                setLists(response.data.results)
-            })
+        ListService.getMyLists().then(reponse => setLists(reponse.data))
 
-
-        // if (media.id) {
-        //     const title = media.name || media.title;
-        //     const year = media.release_date?.substring(0, 4) || media.first_air_date?.substring(0, 4);
-
-        //     // Double check that we have a valid title and year
-        //     if (title && year) {
-        //         ShowService.GetScoreByMediaNameandYear(title, year)
-        //             .then((response) => {
-        //                 if (response.data.Response === "True") {
-        //                     setMediaScores(response.data.Ratings);
-        //                 } else {
-        //                     console.log("OMDb Error:", response.data.Error);
-        //                 }
-        //             }).catch((error) => console.log('Scores not found', error));
-        //     }
-        // }
-
-
-        
         if (id && type) {
-                    FavoriteService.checkFavorite(id, type)
-                        .then((response) => {
-                            if (response.data == true) {
-                                setHeart(Liked);
-                            } else {
-                                setHeart(Unliked);
-                            }
-                        })
-                        .catch((error) => {
-                            console.error("Could not verify favorite status", error);
-                        });
+            FavoriteService.checkFavorite(id, type)
+                .then((response) => {
+                    if (response.data == true) {
+                        setHeart(Liked);
+                    } else {
+                        setHeart(Unliked);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Could not verify favorite status", error);
+                });
 
 
-                    BookmarkService.checkBookmark(id, type)
-                        .then((repsonse) => {
-                            if(repsonse.data == true) {
-                                setBookmark(Saved);
-                            } else {
-                                setBookmark(Unsaved)
-                            }
-                        })
-                }
+            BookmarkService.checkBookmark(id, type)
+                .then((repsonse) => {
+                    if (repsonse.data == true) {
+                        setBookmark(Saved);
+                    } else {
+                        setBookmark(Unsaved)
+                    }
+                })
+        }
 
 
 
@@ -263,39 +282,7 @@ export default function MediaDetailview() {
     }, [id, type])
 
 
-    function handleListSelect(ListId, ListName) {
 
-        // Wil check if media is in list before adding to list
-
-        ShowService.isMediaAlreadyInList(ListId, id, type)
-            .then((response) => {
-                setStatusMessage(response.data);
-
-                if (response.data.status_message === "Success.") {
-                    if (type === "tv") {
-                        alert(`${media.name} is already in ${ListName}`);
-                    } else if (type === "movie") {
-                        alert(`${media.title} is already in ${ListName}`);
-                    }
-                } else {
-                    // If it's not in the list, this should make the API call to add it
-                    ShowService.addItemTolist(ListId, payload).then(() => {
-                        if (type === "tv") {
-                            alert(`${media.name} was added to ${ListName}`);
-                        } else if (type === "movie") {
-                            alert(`${media.title} was added to ${ListName}`);
-                        }
-                    }).catch((error) => {
-                        alert("Failed to add to list.");
-                        console.error(error);
-                    });
-                }
-            })
-            .catch((error) => {
-                console.error("Error checking list status", error);
-            });
-
-    }
 
     const trailer = mediavideos?.find(
         (video) => video.type === "Trailer" && video.site === "YouTube"
@@ -407,17 +394,91 @@ export default function MediaDetailview() {
                                 <FontAwesomeIcon icon={heart} />
                             </button>
 
-                            <div className="dropdown dropdown-bottom dropdown-center z-10" onClick={(e) => e.preventDefault()}>
+                            <div className="dropdown dropdown-bottom dropdown-center z-10" >
                                 <div tabIndex={0} role="button" className="text-4xl">
                                     <FontAwesomeIcon icon={faList} />
                                 </div>
+
+
+
                                 <ul tabIndex={-1} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                                    {lists.map((list, index) => (
-                                        <li key={index} value={list.id} >
-                                            <button onClick={() => handleListSelect(list.id, list.name)}>{list.name}</button>
+                                    {lists.map((list) => (
+                                        <li key={list.listId}>
+                                            <button
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleAddToList(list.listId);
+                                                }}
+                                            >
+                                                {list.listName}
+                                            </button>
                                         </li>
                                     ))}
+                                    <li>
+                                        <button
+                                            className="text-blue-600"
+                                            onClick={(e) => {
+                                                e.preventDefault(); // Stop the Link from routing
+                                                document.getElementById(`modal-${id}`).showPopover();
+                                            }}
+                                        >
+                                            <FontAwesomeIcon icon={faPlus} />
+                                            Create a new List!
+                                        </button>
+                                    </li>
+                                    <div className="modal" id={`modal-${id}`} popover="auto">
+                                        <div className="modal-box bg-base-100 shadow-xl overflow-hidden relative z-50">
+
+                                            <h3 className="font-bold text-lg mb-4">Create a New List</h3>
+
+                                            <form>
+                                                <input
+                                                    type="text"
+                                                    placeholder="E.g., Halloween Marathon 🎃"
+                                                    className="input input-bordered w-full mb-6"
+                                                    value={newListName}
+                                                    onChange={(e) => setNewListName(e.target.value)}
+                                                    required
+                                                />
+
+                                                <div className="flex justify-end gap-2">
+                                                    {/* FIXED: Use onClick to hide instead of popoverTargetAction */}
+                                                    <button
+                                                        type="button"
+                                                        className="btn"
+                                                        onClick={() => {
+                                                            setNewListName(""); // Clear input
+                                                            document.getElementById(`modal-${id}`).hidePopover();
+                                                        }}
+                                                    >
+                                                        Cancel
+                                                    </button>
+                                                    <button type="submit" className="btn btn-primary" onClick={handleCreateList}>
+                                                        Create
+                                                    </button>
+                                                </div>
+                                            </form>
+
+                                        </div>
+
+                                        <div className="modal-backdrop fixed inset-0 bg-black/85 z-40">
+                                            <button
+                                                className="w-full h-full cursor-default text-transparent"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    document.getElementById(`modal-${id}`).hidePopover();
+                                                }}
+                                            >
+                                                close
+                                            </button>
+                                        </div>
+                                    </div>
                                 </ul>
+
+
+
+
+
                             </div>
 
                             <button
@@ -504,8 +565,10 @@ export default function MediaDetailview() {
             {reviews?.length > 0 ? (
                 <ReviewCarousel reviews={reviews} />
             ) : (
-                <div className="text-zinc-500 italic text-center bg-zinc-900/40 rounded-xl border border-zinc-800 text-wrap p-5 pl-5 pr-5 max-w-fit m-auto mb-10">
+                <div className="text-zinc-500 italic text-center bg-zinc-900/40 rounded-xl border border-zinc-800 text-wrap p-5 pl-5 pr-5 max-w-fit m-auto mb-10" 
+                onClick={() => document.getElementById('coming-soon').showPopover()}>
                     Be the first to leave a review.
+                    <ComingSoonModal id="coming-soon" />
                 </div>
             )}
 
@@ -610,7 +673,7 @@ export default function MediaDetailview() {
                 </div>
             </div>
 
-            <MediaCarousel media={similar} title={type == "movie" ? "Similar Movies" : "Similar Shows"} type={type == "movie" ? "movie" : "tv"}/>
+            <MediaCarousel media={similar} title={type == "movie" ? "Similar Movies" : "Similar Shows"} type={type == "movie" ? "movie" : "tv"} />
 
 
 
