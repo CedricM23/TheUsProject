@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router"; // Added useNavigate
+import { Link, useNavigate } from "react-router";
 import { UserContext } from '../../context/UserContext';
 
 export default function Navbar({ name }) {
@@ -110,8 +110,9 @@ export default function Navbar({ name }) {
                             <div className="w-10 rounded-full">
                                 <Link to="/profile">
                                     <img
-                                        alt="Tailwind CSS Navbar component"
-                                        src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                        src={user.imagePath || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"}
+                                        alt="User Avatar"
+                                    />
                                 </Link>
                             </div>
                         </div>
