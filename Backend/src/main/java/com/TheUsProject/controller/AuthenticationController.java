@@ -70,5 +70,11 @@ public class AuthenticationController {
         }
     }
 
+    @GetMapping("/health")
+    public HttpStatus server_running(){
+        return HttpStatus.OK;
+    }
+
+
 }
 

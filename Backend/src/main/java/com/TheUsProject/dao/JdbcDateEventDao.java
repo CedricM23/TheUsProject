@@ -108,7 +108,6 @@ public class JdbcDateEventDao implements DateEventDao {
                 "WHERE date_id = ?;";
 
         try {
-            // Null check for the description array to prevent NullPointerExceptions during update
             Object[] descriptionArray = dateEvent.getDescription() != null 
                 ? dateEvent.getDescription().toArray(new String[0]) 
                 : new String[0];

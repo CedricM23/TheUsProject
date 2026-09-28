@@ -2,10 +2,12 @@ package com.TheUsProject.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
+import jakarta.persistence.*;
 
 public class User {
 
@@ -16,18 +18,28 @@ public class User {
    @JsonIgnore
    private String firstname;
    private String lastname;
+   private String email;
+   private String imagePath;
+   private LocalDateTime createdAt;
    private boolean activated;
    private Set<Authority> authorities = new HashSet<>();
 
-   public User() { }
+   // @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   // private UserPreferences preferences;
 
-   public User(UUID id, String username, String password, String firstname, String lastname, String authorities) {
+   public User() {
+   }
+
+   public User(UUID id, String username, String password, String firstname, String lastname, String email, String imagePath, String authorities) {
       this.id = id;
       this.username = username;
       this.password = password;
       this.firstname = firstname;
       this.lastname = lastname;
-      if (authorities != null) this.setAuthorities(authorities);
+      this.email = email;
+      this.imagePath = imagePath;
+      if (authorities != null)
+         this.setAuthorities(authorities);
       this.activated = true;
    }
 
@@ -55,22 +67,45 @@ public class User {
       this.password = password;
    }
 
-   public String getFirstName(){
+   public String getFirstName() {
       return firstname;
    }
 
-   public void setFirstName(String firstname){
+   public void setFirstName(String firstname) {
       this.firstname = firstname;
    }
 
-    public String getLastName(){
+   public String getLastName() {
       return lastname;
    }
 
-   public void setLastName(String lastname){
+   public void setLastName(String lastname) {
       this.lastname = lastname;
    }
 
+   public String getEmail() {
+      return email;
+   }
+
+   public void setEmail(String email) {
+      this.email = email;
+   }
+
+   public String getImagePath() {
+      return imagePath;
+   }
+
+   public void setImagePath(String imagePath) {
+      this.imagePath = imagePath;
+   }
+
+   public LocalDateTime getCreatedAt() {
+      return createdAt;
+   }
+
+   public void setCreatedAt(LocalDateTime createdAt) {
+      this.createdAt = createdAt;
+   }
 
    public boolean isActivated() {
       return activated;
@@ -96,16 +131,26 @@ public class User {
       }
    }
 
+   // public UserPreferences getPreferences() {
+   //    return preferences;
+   // }
+
+   // public void setPreferences(UserPreferences preferences) {
+   //    this.preferences = preferences;
+   // }
+
    @Override
    public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o)
+         return true;
+      if (o == null || getClass() != o.getClass())
+         return false;
       User user = (User) o;
-      return id == user.id &&
-              activated == user.activated &&
-              Objects.equals(username, user.username) &&
-              Objects.equals(password, user.password) &&
-              Objects.equals(authorities, user.authorities);
+      return activated == user.activated &&
+            Objects.equals(id, user.id) && // Fixed from id == user.id
+            Objects.equals(username, user.username) &&
+            Objects.equals(password, user.password) &&
+            Objects.equals(authorities, user.authorities);
    }
 
    @Override
@@ -116,12 +161,15 @@ public class User {
    @Override
    public String toString() {
       return "User{" +
-              "id=" + id +
-              ", username=" + username + '\'' +
-              ", firstname=" + firstname + '\'' +
-              ",lastname=" + lastname + '\'' +
-              ", activated=" + activated +
-              ", authorities=" + authorities +
-              '}';
+            "id=" + id +
+            ", username='" + username + '\'' +
+            ", firstname='" + firstname + '\'' +
+            ", lastname='" + lastname + '\'' +
+            ", email='" + email + '\'' +
+            ", imagePath='" + imagePath + '\'' +
+            ", createdAt=" + createdAt +
+            ", activated=" + activated +
+            ", authorities=" + authorities +
+            '}';
    }
 }

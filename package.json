@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@number-flow/react": "^0.6.2",
     "react-google-autocomplete": "^2.7.5"
   }
 }
