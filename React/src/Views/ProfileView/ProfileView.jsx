@@ -61,7 +61,7 @@ export default function ProfileView() {
 
                     <div className="card-actions mt-8 w-full flex-col gap-3">
                         <Link to='/user/update' className="btn btn-primary w-full">Edit Profile</Link>
-                        <button className="btn btn-primary w-full">Edit Preferences</button>
+                        <Link to='/preferences' className="btn btn-primary w-full">Edit Preferences</Link>
                         {user?.authorities?.some(auth => auth.name.includes("ADMIN")) && (
                             <Link  to='/Admin' className="btn btn-primary w-full bg-gray-900">Admin Settings</Link>
                         )}
