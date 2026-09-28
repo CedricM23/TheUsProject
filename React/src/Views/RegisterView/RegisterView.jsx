@@ -222,6 +222,14 @@ export default function RegisterView() {
             
           </form>
 
+          <div className="mt-4 text-center">
+            <p className="text-sm">
+              <Link to="/aboutus" className="link link-primary font-bold">
+                Learn more about us!
+              </Link>
+            </p>
+          </div>
+
           {/* Bottom Link */}
           <div className="mt-4 text-center">
             <p className="text-sm">
