@@ -3,6 +3,7 @@ import ShowService from "../../services/ShowService"
 import DateCarousel from "../../components/DateCarousel/DateCarousel"
 import DatesService from "../../services/DatesService"
 import MediaCarousel from "../../components/MediaCarousel/MediaCarousel"
+import CreateDateButton from "../../components/CreateDateButton/CreateDateButton"
 
 export default function DashboardView() {
     // Test - This page will start with dates then cascade with recommended moveis, popular, and more
@@ -67,10 +68,11 @@ export default function DashboardView() {
             {dates && dates.length > 0 ? (
                 <DateCarousel dates={dates} />
             ) : (
-                <div className="flex justify-center items-center p-8 mt-8">
+                <div className="flex justify-center items-center p-8 mt-8 flex-col gap-4">
                     <p className="text-xl font-['Libre_Baskerville',_serif] text-gray-500">
-                        Save a date
+                        Save a date 
                     </p>
+                    <CreateDateButton />
                 </div>
             )}
             <MediaCarousel media={popularMovies} title="Popular Movies" type="movie" />
