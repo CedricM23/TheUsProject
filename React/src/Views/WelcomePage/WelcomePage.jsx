@@ -39,7 +39,7 @@ export default function WelcomePage() {
                         </Link>
                     </div>
 
-                    <div className="mt-10 flex items-center gap-2 text-sm text-zinc-400 font-medium">
+                    <div className="mt-10 flex items-center gap-2 text-sm text-zinc-400 font-medium rounded-2xl pointer-events-none">
                         <img 
                             src="https://media.tenor.com/R3U05e4hJgIAAAAi/cute-bear.gif" 
                             alt="tiny bear" 
