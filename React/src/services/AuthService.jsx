@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 
-axios.defaults.baseURL = 'http://localhost:9000';
+axios.defaults.baseURL = import.meta.env.VITE_BASE_API;
 
 export default {
 
@@ -16,5 +16,9 @@ export default {
   getUserProfile(userId) {
     return axios.get(`/users/${userId}`);
   },
+    updateUser(userId, userData) {
+    return axios.post(`api/users/${userId}/update`, userData);
+  }
+
 
 }
