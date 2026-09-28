@@ -23,6 +23,7 @@ import WelcomePage from './Views/WelcomePage/WelcomePage'
 import RegisterView from './Views/RegisterView/RegisterView'
 import UpdateUserView from './Views/UpdateUserView/UpdateUserView'
 import { Navigate } from 'react-router'
+import AdminDashboardView from './Views/AdminDashboardView/AdminDashboardView'
 
 const MainLayout = () => {
   return (
@@ -105,6 +106,7 @@ function App() {
               <Route path='/dates/edit/:id' element={<UpdateDateView />} />
               <Route path='/profile' element={<ProfileView />} />
               <Route path='/user/update' element={<UpdateUserView />} />
+              <Route path='/admin' element={<AdminDashboardView/>} />
             </Route>
 
           </Routes>
