@@ -24,6 +24,7 @@ import RegisterView from './Views/RegisterView/RegisterView'
 import UpdateUserView from './Views/UpdateUserView/UpdateUserView'
 import { Navigate } from 'react-router'
 import AdminDashboardView from './Views/AdminDashboardView/AdminDashboardView'
+import AboutUsView from './Views/AboutUsView/AboutUsView'
 
 const MainLayout = () => {
   return (
@@ -88,6 +89,7 @@ function App() {
             <Route path='/welcome' element={user ? <Navigate to="/" /> : <WelcomePage />} />
             <Route path="/login" element={<LoginView onLogin={handleLogin} />} />
             <Route path='/signup' element={<RegisterView />} />
+              <Route path='/aboutus' element={<AboutUsView/>} />
 
             <Route element={<MainLayout />}>
 
