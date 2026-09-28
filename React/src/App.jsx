@@ -19,6 +19,10 @@ import BookmarksView from './Views/BookmarksView/BookmarksView'
 import ListView from './Views/ListView/ListView'
 import UpdateDateView from './Views/UpdateDateView/UpdateDateView'
 import ProfileView from './Views/ProfileView/ProfileView'
+import WelcomePage from './Views/WelcomePage/WelcomePage'
+import RegisterView from './Views/RegisterView/RegisterView'
+import UpdateUserView from './Views/UpdateUserView/UpdateUserView'
+import { Navigate } from 'react-router'
 
 const MainLayout = () => {
   return (
@@ -31,6 +35,7 @@ const MainLayout = () => {
 
 function App() {
   // 1. Synchronously load the user from local storage FIRST
+  const [statusMessage, setStatusMessage] = useState("")
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
@@ -78,21 +83,30 @@ function App() {
       <BrowserRouter>
         <UserContext.Provider value={user}>
           <Routes>
+
+            <Route path='/welcome' element={user ? <Navigate to="/" /> : <WelcomePage />} />
+            <Route path="/login" element={<LoginView onLogin={handleLogin} />} />
+            <Route path='/signup' element={<RegisterView />} />
+
             <Route element={<MainLayout />}>
-              <Route path='/' element={user ? <DashboardView /> : <DashboardView />} />
+
+          
+              <Route path='/' element={user ? <DashboardView /> : <Navigate to="/welcome" />} />
+
               <Route path='/dates' element={<ProtectedRoute><DatesView /></ProtectedRoute>} />
               <Route path='dates/:id' element={<DateDetailView />} />
               <Route path="/logout" element={<LogoutView onLogout={handleLogout} />} />
-              <Route path="/:id/:type" element={< MediaDetailview />}/>
+              <Route path="/:id/:type" element={<MediaDetailview />} />
               <Route path="/dates/new" element={<CreateDateView />} />
               <Route path="/search" element={<SearchResultsView />} />
-              <Route path='/favorites' element={<FavoritesView/>} />
-              <Route path='/watchlist' element={<BookmarksView/>} />
-              <Route path='/lists' element={<ListView/>} />
-              <Route path='/dates/edit/:id' element={<UpdateDateView/>} />
-              <Route path='/profile' element={<ProfileView/>} />
+              <Route path='/favorites' element={<FavoritesView />} />
+              <Route path='/watchlist' element={<BookmarksView />} />
+              <Route path='/lists' element={<ListView />} />
+              <Route path='/dates/edit/:id' element={<UpdateDateView />} />
+              <Route path='/profile' element={<ProfileView />} />
+              <Route path='/user/update' element={<UpdateUserView />} />
             </Route>
-            <Route path="/login" element={<LoginView onLogin={handleLogin} />} />
+
           </Routes>
         </UserContext.Provider>
       </BrowserRouter>
