@@ -1,8 +1,7 @@
-import { UserContext } from "../../context/UserContext"; 
+import { UserContext } from "../../context/UserContext";
 import { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import AuthService from "../../services/AuthService";
-
 
 export default function UpdateUserView() {
     const user = useContext(UserContext);
@@ -98,7 +97,7 @@ export default function UpdateUserView() {
         } finally {
             setIsUploading(false);
         }
-    } 
+    }
 
     return (
         <div className="container mx-auto px-4 py-10 max-w-3xl">
@@ -113,7 +112,7 @@ export default function UpdateUserView() {
                     )}
 
                     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-                        
+
                         {/* Profile Picture Upload - Updated to match darker/neutral theme */}
                         <div className="flex flex-col items-center justify-center w-full mb-4">
                             <div className="relative w-32 h-32 rounded-full border-2 border-dashed border-zinc-500 bg-base-200 flex items-center justify-center overflow-hidden hover:bg-base-300 transition-colors cursor-pointer shadow-sm group">
@@ -150,7 +149,7 @@ export default function UpdateUserView() {
                                 <input
                                     type="text"
                                     name="lastName"
-                                    placeholder={formData.lastName}
+                                    place={formData.lastName}
                                     onChange={handleChange}
                                     required
                                     className="input input-bordered w-full"
@@ -164,7 +163,7 @@ export default function UpdateUserView() {
                             <input
                                 type="email"
                                 name="email"
-                                placeholder={formData.email}
+                                value={formData.email}
                                 onChange={handleChange}
                                 required
                                 className="input input-bordered w-full"
@@ -172,17 +171,18 @@ export default function UpdateUserView() {
                         </div>
 
                         {/* Action Buttons */}
-                        <div className="form-control mt-6 flex flex-row gap-4">
+                        {/* Main Action Buttons */}
+                        <div className="form-control mt-6 flex flex-row gap-4 justify-center">
                             <button
                                 type="button"
-                                className="btn btn-ghost w-1/3"
+                                className="btn btn-ghost w-50"
                                 onClick={() => navigate(-1)} // Goes back to the previous page
                             >
                                 Cancel
                             </button>
-                            <button 
-                                type="submit" 
-                                className="btn btn-primary w-2/3" 
+                            <button
+                                type="submit"
+                                className="btn btn-primary w-50"
                                 disabled={isUploading}
                             >
                                 {isUploading ? <span className="loading loading-spinner"></span> : "Save Changes"}
@@ -190,6 +190,25 @@ export default function UpdateUserView() {
                         </div>
 
                     </form>
+
+                    {/* Danger Zone / Delete Account */}
+                    <div className="mt-8 pt-6 border-t border-zinc-700/20">
+                        <div className="flex flex-col gap-2">
+                            <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Danger Zone</span>
+                            <button
+                                type="button" // Use type="button" so it doesn't accidentally submit the form
+                                onClick={() => {
+                                    if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+                                        // TODO: Call your delete account service here
+                                    }
+                                }}
+                                className="btn btn-error btn-outline w-full"
+                            >
+                                Delete Account
+                            </button>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
