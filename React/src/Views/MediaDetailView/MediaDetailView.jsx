@@ -494,6 +494,7 @@ export default function MediaDetailview() {
                 </div>
             </div>
 
+            {/* Where to watch */}
             {providers.length > 0 && (
 
                 <div className="text-center justify-center flex p-5">
@@ -515,7 +516,6 @@ export default function MediaDetailview() {
                     )}
                 </div>
             )}
-            {/* Cast & Crew */}
 
             {/* Seasons Overview (Only renders for TV shows) */}
             {type === 'tv' && media.seasons?.length > 0 && (
@@ -525,7 +525,7 @@ export default function MediaDetailview() {
                     <div className="carousel carousel-center w-full space-x-5 pb-4">
 
                         {media.seasons.map((season) => (
-                            <div key={season.id} className="carousel-item flex-col w-[160px] group">
+                            <div key={season.id} className="carousel-item flex-col w-[160px] group"   onClick={() => document.getElementById('coming-soon').showPopover()}>
 
                                 {season.poster_path ? (
                                     <img
@@ -552,7 +552,7 @@ export default function MediaDetailview() {
                                         <span>{season.episode_count} Episodes</span>
                                     </div>
                                 </div>
-
+                                 <ComingSoonModal id="coming-soon" />
                             </div>
                         ))}
 
@@ -560,8 +560,10 @@ export default function MediaDetailview() {
                 </div>
             )}
 
+            {/* Cast & Crew */}
             <CastandCrewCarousel people={credits} />
 
+            {/* Reviews */}
             {reviews?.length > 0 ? (
                 <ReviewCarousel reviews={reviews} />
             ) : (
