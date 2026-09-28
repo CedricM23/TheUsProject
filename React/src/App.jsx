@@ -25,6 +25,7 @@ import UpdateUserView from './Views/UpdateUserView/UpdateUserView'
 import { Navigate } from 'react-router'
 import AdminDashboardView from './Views/AdminDashboardView/AdminDashboardView'
 import AboutUsView from './Views/AboutUsView/AboutUsView'
+import EditPreferencesView from './Views/EditPreferencesView/EditPreferencesView'
 
 const MainLayout = () => {
   return (
@@ -109,6 +110,7 @@ function App() {
               <Route path='/profile' element={<ProfileView />} />
               <Route path='/user/update' element={<UpdateUserView />} />
               <Route path='/admin' element={<AdminDashboardView/>} />
+              <Route path='/preferences' element={<EditPreferencesView/>} />
             </Route>
 
           </Routes>
