@@ -40,7 +40,8 @@ export default function ProfileView() {
                         </div>
                     </div>
 
-                    <h2 className="card-title text-3xl font-bold">{user.username || "User"}</h2>
+                    <h2 className="card-title text-3xl font-bold">{user.firstName} {user.lastName}</h2>
+                     <p className="text-zinc-400">@{user.username || "User"}</p>
                     <p className="text-zinc-400 mb-6">{user.email || "user@example.com"}</p>
 
                     <div className="flex w-full justify-center gap-8 border-t border-zinc-800 pt-6">
@@ -62,7 +63,7 @@ export default function ProfileView() {
                         <Link to='/user/update' className="btn btn-primary w-full">Edit Profile</Link>
                         <button className="btn btn-primary w-full">Edit Preferences</button>
                         {user?.authorities?.some(auth => auth.name.includes("ADMIN")) && (
-                            <button className="btn btn-primary w-full bg-gray-900">Admin Settings</button>
+                            <Link  to='/Admin' className="btn btn-primary w-full bg-gray-900">Admin Settings</Link>
                         )}
                         <Link to="/logout" className="btn btn-outline btn-error w-full">Logout</Link>
                     </div>
