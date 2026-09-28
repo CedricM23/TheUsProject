@@ -37,7 +37,7 @@ export default function Navbar({ name }) {
                             <li><Link to="/favorites">Favorites</Link></li>
                             <li><Link to="/lists">Your Lists</Link></li>
                             <li><Link to="/watchlist">Watchlist</Link></li>
-                            <li><a>About Us</a></li>
+                            <li><Link to=''>About Us</Link></li>
                         </ul>
                     </div>
                     <Link to="/" className="btn btn-ghost text-xl">{user ? name : "TheUsProject"}</Link>
@@ -64,18 +64,18 @@ export default function Navbar({ name }) {
                                 </ul>
                             </details>
                         </li>
-                        <li><a>About Us</a></li>
+                        <li><Link to=''>About Us</Link></li>
                     </ul>
                 </div>
 
                 <div className="navbar-end gap-2">
 
-                    {/* Wrapped the input and button in a form */}
+                    {/* Search Bar */}
                     <form onSubmit={handleSubmit} className="flex items-center overflow-hidden">
                         <input
                             ref={searchInputRef}
                             type="text"
-                            placeholder="Dates, Movies, Tv Shows"
+                            placeholder="Movies, Tv Shows"
                             value={searchTerm}
                             className={`input input-sm transition-all duration-300 ease-in-out origin-right ${isSearchOpen
                                 ? "w-32 md:w-60 opacity-100 input-bordered mr-2 px-3"
