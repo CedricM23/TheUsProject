@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import placeholder from '../../images/placeholder.png'
+import ComingSoonModal from "../ComingSoonModal/ComingSoonModal";
 
 export default function CastandCrewCarousel({ people }) {
     const carouselRef = useRef(null);
@@ -39,18 +40,18 @@ export default function CastandCrewCarousel({ people }) {
                 className="carousel carousel-center rounded-box max-w-full space-x-4 p-4"
             >
                 {people.map((person) => (
-                    <div key={person.id} className="w-30 carousel-item flex-col items-center">
+                    <div key={person.id} className="w-30 carousel-item flex-col items-center group cursor-pointer" onClick={() => document.getElementById('coming-soon').showPopover()}>
                         {person.profile_path ?
                             <img
                                 src={`https://image.tmdb.org/t/p/w200${person.profile_path}`}
                                 alt={person.name}
-                                className="w-30 h-30 rounded-full object-cover bg-zinc-800 shadow-md mb-2"
+                                className="w-30 h-30 rounded-full object-cover shadow-md mb-2 border-2 border-zinc-800 transition-colors group-hover:border-zinc-500"
                                 loading="lazy"
                             /> :
-                            <img 
-                            className="w-30 h-30 rounded-full object-cover bg-zinc-800 shadow-md mb-2" 
-                            src={placeholder} 
-                            alt="lazy" />
+                            <img
+                                className="w-30 h-30 rounded-full object-cover bg-zinc-800 shadow-md mb-2 border-2 transition-colors group-hover:border-zinc-500"
+                                src={placeholder}
+                                alt="lazy" />
                         }
                         <h1 className="text-sm text-center font-semibold leading-tight">
                             {person.name}
@@ -58,6 +59,7 @@ export default function CastandCrewCarousel({ people }) {
                         <h3 className="text-xs text-center font-semibold leading-tight text-gray-500">
                             {person.character}
                         </h3>
+                        <ComingSoonModal id="coming-soon" />
                     </div>
                 ))}
             </div>
