@@ -57,7 +57,7 @@ export default function UpdateUserView() {
         if (imageFile) {
             const uploadData = new FormData();
             uploadData.append('file', imageFile);
-            // TODO: Replace with your Cloudinary upload preset and cloud name
+            // TODO: Replace with Cloudinary upload preset and cloud name
             uploadData.append('upload_preset', 'YOUR_UPLOAD_PRESET_HERE');
 
             try {
@@ -149,7 +149,7 @@ export default function UpdateUserView() {
                                 <input
                                     type="text"
                                     name="lastName"
-                                    place={formData.lastName}
+                                    placeholder={formData.lastName}
                                     onChange={handleChange}
                                     required
                                     className="input input-bordered w-full"
@@ -163,7 +163,7 @@ export default function UpdateUserView() {
                             <input
                                 type="email"
                                 name="email"
-                                value={formData.email}
+                                placeholder={formData.email}
                                 onChange={handleChange}
                                 required
                                 className="input input-bordered w-full"
@@ -176,7 +176,7 @@ export default function UpdateUserView() {
                             <button
                                 type="button"
                                 className="btn btn-ghost w-50"
-                                onClick={() => navigate(-1)} // Goes back to the previous page
+                                onClick={() => navigate(-1)} 
                             >
                                 Cancel
                             </button>
