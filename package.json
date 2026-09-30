@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@number-flow/react": "^0.6.2",
+    "framer-motion": "^13.4.6",
     "react-google-autocomplete": "^2.7.5"
   }
 }
