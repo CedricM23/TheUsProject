@@ -11,7 +11,7 @@ public interface DateEventDao {
     //Create
     DateEvent CreateDateEvent(UUID userId, DateEvent dateEvent); // Done
     //Read
-    List<DateEvent> getDateEventsByUserId(UUID userId);
+    List<DateEvent> getDateEventsByUserId(UUID userId); //Done
     DateEvent getDateEventById(UUID dateId); //Done
     //Update
     DateEvent updateDateEvent(DateEvent dateEvent);
