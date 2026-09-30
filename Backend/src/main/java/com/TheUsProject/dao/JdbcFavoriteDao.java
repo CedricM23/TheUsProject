@@ -48,7 +48,6 @@ public class JdbcFavoriteDao implements FavoriteDao{
         String sql = "SELECT COUNT(*) FROM favorites WHERE user_id = ? AND tmdb_media_id = ? AND media_type = ?";
         
         try {
-            // queryForObject with Integer.class counts the matching rows
             Integer count = jdbcTemplate.queryForObject(sql, Integer.class, userId, tmdbMediaId, mediaType);
             return count != null && count > 0;
         } catch (CannotGetJdbcConnectionException e) {
@@ -59,7 +58,7 @@ public class JdbcFavoriteDao implements FavoriteDao{
     @Override
     public Favorite addFavorite(UUID userId, Favorite favorite) {
         Favorite newFavorite = null;
-        String sql = "INSERT INTO favorites (user_id, tmdb_media_id, media_type) VALUES (?, ?, ?) RETURNING favorite_id";
+        String sql = "INSERT INTO favorites (user_id, tmdb_media_id, media_type) VALUES (?, ?, ?) RETURNING favorite_id;";
         
         try {
             int newId = jdbcTemplate.queryForObject(
@@ -80,7 +79,7 @@ public class JdbcFavoriteDao implements FavoriteDao{
 
    @Override
     public void removeFavorite(UUID userId, int tmdbMediaId, String mediaType) {
-        String sql = "DELETE FROM favorites WHERE user_id = ? AND tmdb_media_id = ? AND media_type = ?";
+        String sql = "DELETE FROM favorites WHERE user_id = ? AND tmdb_media_id = ? AND media_type = ?;";
         try {
             jdbcTemplate.update(sql, userId, tmdbMediaId, mediaType);
         } catch (CannotGetJdbcConnectionException e) {
@@ -94,7 +93,7 @@ public class JdbcFavoriteDao implements FavoriteDao{
 
     private Favorite getFavoriteById(int favoriteId) {
         Favorite favorite = null;
-        String sql = "SELECT favorite_id, user_id, tmdb_media_id, media_type FROM favorites WHERE favorite_id = ?";
+        String sql = "SELECT favorite_id, user_id, tmdb_media_id, media_type FROM favorites WHERE favorite_id = ?;";
         
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, favoriteId);
