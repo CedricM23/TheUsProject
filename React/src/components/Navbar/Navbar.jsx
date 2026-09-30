@@ -26,6 +26,7 @@ export default function Navbar({ name }) {
 
     return (
         <>
+            {/* The navbar is inherently a positioning context because of sticky */}
             <div className="navbar bg-base-100 shadow-sm sticky top-0 z-50">
                 <div className="navbar-start">
                     <div className="dropdown">
@@ -70,17 +71,27 @@ export default function Navbar({ name }) {
 
                 <div className="navbar-end gap-2">
 
-                    {/* Search Bar */}
-                    <form onSubmit={handleSubmit} className="flex items-center overflow-hidden">
+                    {/* Search Bar - Removed overflow-hidden so the absolute dropdown works */}
+                    <form onSubmit={handleSubmit} className="flex items-center">
                         <input
                             ref={searchInputRef}
                             type="text"
                             placeholder="Movies, Tv Shows"
                             value={searchTerm}
-                            className={`input input-sm transition-all duration-300 ease-in-out origin-right ${isSearchOpen
-                                ? "w-32 md:w-60 opacity-100 input-bordered mr-2 px-3"
-                                : "w-0 opacity-0 border-transparent p-0 pointer-events-none"
-                                }`}
+                            className={`input transition-all duration-300 ease-in-out
+                                /* Mobile styling: Slides down full-width from behind the navbar */
+                                absolute left-0 w-full -z-10 bg-base-100 rounded-none shadow-md h-12 text-base px-4 border-x-0 border-t-0
+                                ${isSearchOpen
+                                    ? "top-full translate-y-0 opacity-100 pointer-events-auto border-b"
+                                    : "top-full -translate-y-full opacity-0 pointer-events-none"
+                                }
+                                /* Desktop styling: Stays inline, expands horizontally */
+                                md:static md:z-auto md:transform-none md:rounded-lg md:shadow-none md:bg-transparent md:origin-right md:h-8 md:text-sm
+                                ${isSearchOpen
+                                    ? "md:w-60 md:opacity-100 md:input-bordered md:mr-2"
+                                    : "md:w-0 md:opacity-0 md:border-transparent md:px-0 md:pointer-events-none"
+                                }
+                            `}
                             onBlur={() => setIsSearchOpen(false)}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -89,10 +100,12 @@ export default function Navbar({ name }) {
                             type="button"
                             className="btn btn-ghost btn-circle"
                             onMouseDown={(e) => e.preventDefault()}
-                            onClick={() => {
+                            onClick={(e) => {
                                 if (isSearchOpen && searchTerm.trim() !== "") {
-                                    handleSubmit(new Event('submit'));
+                                    // Submit if open and has text
+                                    handleSubmit(e);
                                 } else {
+                                    // Otherwise just toggle the search bar
                                     setIsSearchOpen(!isSearchOpen);
                                 }
                             }}
@@ -106,7 +119,6 @@ export default function Navbar({ name }) {
                     {/* User */}
                     {user ?
                         <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-
                             <div className="w-10 rounded-full">
                                 <Link to="/profile">
                                     <img
@@ -116,7 +128,6 @@ export default function Navbar({ name }) {
                                 </Link>
                             </div>
                         </div>
-
                         :
                         // LOGIN BUTTON
                         <Link to="/login">
