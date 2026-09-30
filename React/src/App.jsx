@@ -26,6 +26,7 @@ import { Navigate } from 'react-router'
 import AdminDashboardView from './Views/AdminDashboardView/AdminDashboardView'
 import AboutUsView from './Views/AboutUsView/AboutUsView'
 import EditPreferencesView from './Views/EditPreferencesView/EditPreferencesView'
+import ForbiddenPage from './Views/ForbiddenPage/ForbiddenPage'
 
 const MainLayout = () => {
   return (
@@ -91,6 +92,7 @@ function App() {
             <Route path="/login" element={<LoginView onLogin={handleLogin} />} />
             <Route path='/signup' element={<RegisterView />} />
               <Route path='/aboutus' element={<AboutUsView/>} />
+              <Route path='/access-denied' element={<ForbiddenPage />} />
 
             <Route element={<MainLayout />}>
 
