@@ -43,7 +43,6 @@ public class JdbcUserDao implements UserDao {
     @Override
     public List<User> getUsers() {
         List<User> users = new ArrayList<>();
-        // FIXED: Added missing columns to match mapRowToUser
         String sql = "SELECT user_id, username, password_hash, first_name, last_name, email, image_path, created_at, role FROM users;";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
