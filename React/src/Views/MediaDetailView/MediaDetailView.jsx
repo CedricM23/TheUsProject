@@ -546,7 +546,7 @@ export default function MediaDetailview() {
             ) : (
                 <div className="text-zinc-500 italic text-center bg-zinc-900/40 rounded-xl border border-zinc-800 text-wrap p-5 pl-5 pr-5 max-w-fit m-auto mb-10"
                     onClick={() => document.getElementById('coming-soon').showPopover()}>
-                    Be the first to leave a review.
+                    Be the first to leave a review
                     <ComingSoonModal id="coming-soon" />
                 </div>
             )}
