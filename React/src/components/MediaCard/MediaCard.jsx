@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router";
 import FavoriteService from "../../services/FavoriteService";
 import ListService from "../../services/ListService";
+import MarkAsWatched from '../../components/MarkAsWatched/MarkAsWatched'
 
 export default function MediaCard({ movie, mediaType, listId }) {
     const [newListName, setNewListName] = useState("");
@@ -133,19 +134,28 @@ export default function MediaCard({ movie, mediaType, listId }) {
                         {movie.title || movie.name}
                     </h1>
 
-                    <div className="flex flex-col items-center w-full mt-auto">
-                        <p className="mt-2">{Math.round(movie.vote_average / 10 * 100)}%</p>
+                    <div className="flex flex-col items-center w-full mt-auto align-middle">
+                        {/* Centered percentage score text */}
+                        <p className="mt-2 text-center w-full font-semibold">
+                            {Math.round(movie.vote_average / 10 * 100)}%
+                        </p>
 
-                        <div className="flex gap-5 mt-2 pointer-events-auto">
+
+                        <div className="flex flex-row items-center justify-center gap-4 mt-2 w-full pointer-events-auto">
+
+                            {/* Heart Button */}
                             <button
-                                className="border-0 bg-transparent text-2xl w-full cursor-pointer hover:text-red-500 transition-colors"
+                                className="border-0 bg-transparent text-2xl cursor-pointer hover:text-red-500 transition-colors flex items-center justify-center"
                                 onClick={handleClick}
+                                aria-label="Toggle Favorite"
                             >
                                 <FontAwesomeIcon icon={heart} />
                             </button>
 
-                            <div className="dropdown dropdown-top dropdown-center z-10" onClick={(e) => e.preventDefault()}>
-                                <div tabIndex={0} role="button" className="btn m-1">
+                            {/* List Dropdown */}
+                            <div className="dropdown dropdown-top dropdown-center z-10 flex items-center justify-center" onClick={(e) => e.preventDefault()}>
+                                {/* Removed .btn styles and matched the text size/flex */}
+                                <div tabIndex={0} role="button" className="text-2xl cursor-pointer m-0 flex items-center justify-center hover:text-blue-500 transition-colors">
                                     <FontAwesomeIcon icon={faList} />
                                 </div>
                                 <ul tabIndex={-1} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
@@ -176,57 +186,16 @@ export default function MediaCard({ movie, mediaType, listId }) {
                                 </ul>
                             </div>
 
-                            {/* MODAL MOVED OUTSIDE THE DROPDOWN */}
-                            <div className="modal" id={`modal-${movie.id}`} ref={modalRef} popover="auto">
-                                <div className="modal-box bg-base-100 shadow-xl overflow-hidden relative z-50" onClick={(e) => e.stopPropagation()}>
-                                    <h3 className="font-bold text-lg mb-4">Create a New List</h3>
-                                    <form onSubmit={handleCreateList}>
-                                        <input
-                                            type="text"
-                                            placeholder="E.g., Halloween Marathon 🎃"
-                                            className="input input-bordered w-full mb-6"
-                                            value={newListName}
-                                            onChange={(e) => setNewListName(e.target.value)}
-                                            required
-                                        />
-                                        <div className="flex justify-end gap-2">
-                                            <button
-                                                type="button"
-                                                className="btn"
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    setNewListName("");
-                                                    if (modalRef.current) modalRef.current.hidePopover();
-                                                }}
-                                            >
-                                                Cancel
-                                            </button>
-                                            <button type="submit" className="btn btn-primary">
-                                                Create
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+                            {/* END MODAL CODE (Keep your modal code here exactly as it is) */}
+                            {/* ... */}
 
-                                <div className="modal-backdrop fixed inset-0 bg-black/85 z-40">
-                                    <button
-                                        type="button"
-                                        className="w-full h-full cursor-default text-transparent border-none bg-transparent"
-                                        onClick={(e) => {
-                                            e.preventDefault();
-                                            if (modalRef.current) modalRef.current.hidePopover();
-                                        }}
-                                    >
-                                        close
-                                    </button>
-                                </div>
-                            </div>
-                            {/* END MODAL */}
 
+                            {/* Trash Button */}
                             {listId ? (
                                 <button
-                                    className="border-0 bg-transparent text-2xl w-full cursor-pointer hover:text-red-500 transition-colors"
+                                    className="border-0 bg-transparent text-2xl cursor-pointer hover:text-red-500 transition-colors flex items-center justify-center"
                                     onClick={handleRemoveFromList}
+                                    aria-label="Remove from list"
                                 >
                                     <FontAwesomeIcon icon={faTrash} />
                                 </button>
