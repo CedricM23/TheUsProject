@@ -109,8 +109,6 @@ public class DateEventController {
     // @PreAuthorize("hasRole('ROLE_USER')")
     public void deleteDateEvent(@PathVariable UUID DateEventId) {
         try {
-            // Optional: You might want to verify the event belongs to the principal before
-            // deleting
             int rowsAffected = dateEventDao.deleteDateEventById(DateEventId);
             if (rowsAffected == 0) {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Date event not found or already deleted.");
