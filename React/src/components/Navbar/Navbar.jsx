@@ -21,6 +21,8 @@ export default function Navbar({ name }) {
         if (searchTerm.trim() !== "") {
             navigate(`/search?query=${encodeURIComponent(searchTerm)}`);
             setSearchTerm("");
+            setIsSearchOpen(false); // Closes the search bar UI
+            document.activeElement.blur(); // Dismisses the mobile keyboard
         }
     }
 
