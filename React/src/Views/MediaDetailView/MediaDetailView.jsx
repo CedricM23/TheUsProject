@@ -16,16 +16,17 @@ import BookmarkService from "../../services/BookmarkService";
 import ListService from "../../services/ListService";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import ComingSoonModal from "../../components/ComingSoonModal/ComingSoonModal";
+import { faCirclePlus } from "@fortawesome/free-solid-svg-icons";
+import MarkAsWatched from "../../components/MarkAsWatched/MarkAsWatched";
 
 export default function MediaDetailview() {
     const { id, type } = useParams();
     const [media, setMedia] = useState({});
     const [images, SetImages] = useState([]);
     const [mediavideos, setMediaVideos] = useState([]);
-    // const [loading, setLoading] = useState(true);
-    // const [lists, setLists] = useState([])
     const [showTrailer, setShowTrailer] = useState(false);
     const [credits, setCredits] = useState([])
+    const [loading, setLoading] = useState(true);
     let hours = Math.floor(media.runtime / 60)
     let time = `${hours}h ${hours % 60}m`
     const imagepath = 'https://image.tmdb.org/t/p/w500'
@@ -82,6 +83,8 @@ export default function MediaDetailview() {
                 // Use the ref to close the modal safely
                 if (modalRef.current) {
                     modalRef.current.hidePopover();
+                } else {
+                    document.getElementById(`modal-${id}`).hidePopover();
                 }
 
                 alert("List created successfully!");
@@ -129,7 +132,6 @@ export default function MediaDetailview() {
                     console.log('Shows not found')
                 )
             // GET Videos
-            //TODO: MOVE INTO MEDIA GALLERY
             ShowService.getviedosbyshow(id)
                 .then((response) => {
                     setMediaVideos(response.data.results)
@@ -256,29 +258,6 @@ export default function MediaDetailview() {
                     }
                 })
         }
-
-
-
-        // if (id && type) {
-        //     ShowService.checkAccountStates(id, type)
-        //         .then((response) => {
-        //             if (response.data.favorite) {
-        //                 setHeart(Liked);
-        //             } else {
-        //                 setHeart(Unliked);
-        //             }
-
-        //             if (response.data.watchlist) {
-        //                 setBookmark(Saved);
-        //             } else {
-        //                 setBookmark(Unsaved);
-        //             }
-
-        //         })
-        //         .catch((error) => {
-        //             console.error("Could not verify favorite status", error);
-        //         });
-        // }
     }, [id, type])
 
 
@@ -326,7 +305,7 @@ export default function MediaDetailview() {
                             </h1>
 
                             <div className="mt-2">
-                                <div >{type === "TV" ? <></> : <section> <div className="flex gap-1">{media.genres && media.genres.map((med, index) => (<div>{med.name}{index < media.genres.length - 1 ? ', ' : ''}</div>))}</div></section>}</div>
+                                <div >{type === "TV" ? <></> : <section> <div className="flex gap-1">{media.genres && media.genres.map((med, index) => (<div key={index}>{med.name}{index < media.genres.length - 1 ? ', ' : ''}</div>))}</div></section>}</div>
 
                             </div>
 
@@ -399,8 +378,6 @@ export default function MediaDetailview() {
                                     <FontAwesomeIcon icon={faList} />
                                 </div>
 
-
-
                                 <ul tabIndex={-1} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
                                     {lists.map((list) => (
                                         <li key={list.listId}>
@@ -418,7 +395,8 @@ export default function MediaDetailview() {
                                         <button
                                             className="text-blue-600"
                                             onClick={(e) => {
-                                                e.preventDefault(); // Stop the Link from routing
+                                                e.preventDefault();
+                                                document.activeElement.blur(); // Unfocus the dropdown so it closes
                                                 document.getElementById(`modal-${id}`).showPopover();
                                             }}
                                         >
@@ -426,60 +404,57 @@ export default function MediaDetailview() {
                                             Create a new List!
                                         </button>
                                     </li>
-                                    <div className="modal" id={`modal-${id}`} popover="auto">
-                                        <div className="modal-box bg-base-100 shadow-xl overflow-hidden relative z-50">
+                                </ul>
+                            </div>
 
-                                            <h3 className="font-bold text-lg mb-4">Create a New List</h3>
+                            {/* MOVED OUTSIDE THE DROPDOWN: The Modal */}
+                            <div className="modal" id={`modal-${id}`} popover="auto">
+                                <div className="modal-box bg-base-100 shadow-xl overflow-hidden relative z-50">
 
-                                            <form>
-                                                <input
-                                                    type="text"
-                                                    placeholder="E.g., Halloween Marathon 🎃"
-                                                    className="input input-bordered w-full mb-6"
-                                                    value={newListName}
-                                                    onChange={(e) => setNewListName(e.target.value)}
-                                                    required
-                                                />
+                                    <h3 className="font-bold text-lg mb-4">Create a New List</h3>
 
-                                                <div className="flex justify-end gap-2">
-                                                    {/* FIXED: Use onClick to hide instead of popoverTargetAction */}
-                                                    <button
-                                                        type="button"
-                                                        className="btn"
-                                                        onClick={() => {
-                                                            setNewListName(""); // Clear input
-                                                            document.getElementById(`modal-${id}`).hidePopover();
-                                                        }}
-                                                    >
-                                                        Cancel
-                                                    </button>
-                                                    <button type="submit" className="btn btn-primary" onClick={handleCreateList}>
-                                                        Create
-                                                    </button>
-                                                </div>
-                                            </form>
+                                    <form>
+                                        <input
+                                            type="text"
+                                            placeholder="E.g., Halloween Marathon 🎃"
+                                            className="input input-bordered w-full mb-6"
+                                            value={newListName}
+                                            onChange={(e) => setNewListName(e.target.value)}
+                                            required
+                                        />
 
-                                        </div>
-
-                                        <div className="modal-backdrop fixed inset-0 bg-black/85 z-40">
+                                        <div className="flex justify-end gap-2">
                                             <button
-                                                className="w-full h-full cursor-default text-transparent"
-                                                onClick={(e) => {
-                                                    e.preventDefault();
+                                                type="button"
+                                                className="btn"
+                                                onClick={() => {
+                                                    setNewListName(""); // Clear input
                                                     document.getElementById(`modal-${id}`).hidePopover();
                                                 }}
                                             >
-                                                close
+                                                Cancel
+                                            </button>
+                                            <button type="submit" className="btn btn-primary" onClick={handleCreateList}>
+                                                Create
                                             </button>
                                         </div>
-                                    </div>
-                                </ul>
+                                    </form>
 
+                                </div>
 
-
-
-
+                                <div className="modal-backdrop fixed inset-0 bg-black/85 z-40">
+                                    <button
+                                        className="w-full h-full cursor-default text-transparent"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            document.getElementById(`modal-${id}`).hidePopover();
+                                        }}
+                                    >
+                                        close
+                                    </button>
+                                </div>
                             </div>
+                            {/* End Modal */}
 
                             <button
                                 className="border-0 bg-transparent text-left cursor-pointer text-4xl"
@@ -487,6 +462,9 @@ export default function MediaDetailview() {
                             >
                                 <FontAwesomeIcon icon={bookmark} />
                             </button>
+
+                            {/* Mark as watched button */}
+                            <MarkAsWatched mediaId={id} type={type} runtime={media.runtime}/>
 
                         </div>
                     </div>
@@ -496,7 +474,6 @@ export default function MediaDetailview() {
 
             {/* Where to watch */}
             {providers.length > 0 && (
-
                 <div className="text-center justify-center flex p-5">
                     {providers.length > 0 && (
                         <div className="mt-6">
@@ -525,7 +502,7 @@ export default function MediaDetailview() {
                     <div className="carousel carousel-center w-full space-x-5 pb-4">
 
                         {media.seasons.map((season) => (
-                            <div key={season.id} className="carousel-item flex-col w-[160px] group"   onClick={() => document.getElementById('coming-soon').showPopover()}>
+                            <div key={season.id} className="carousel-item flex-col w-[160px] group" onClick={() => document.getElementById('coming-soon').showPopover()}>
 
                                 {season.poster_path ? (
                                     <img
@@ -552,7 +529,7 @@ export default function MediaDetailview() {
                                         <span>{season.episode_count} Episodes</span>
                                     </div>
                                 </div>
-                                 <ComingSoonModal id="coming-soon" />
+                                <ComingSoonModal id="coming-soon" />
                             </div>
                         ))}
 
@@ -567,8 +544,8 @@ export default function MediaDetailview() {
             {reviews?.length > 0 ? (
                 <ReviewCarousel reviews={reviews} />
             ) : (
-                <div className="text-zinc-500 italic text-center bg-zinc-900/40 rounded-xl border border-zinc-800 text-wrap p-5 pl-5 pr-5 max-w-fit m-auto mb-10" 
-                onClick={() => document.getElementById('coming-soon').showPopover()}>
+                <div className="text-zinc-500 italic text-center bg-zinc-900/40 rounded-xl border border-zinc-800 text-wrap p-5 pl-5 pr-5 max-w-fit m-auto mb-10"
+                    onClick={() => document.getElementById('coming-soon').showPopover()}>
                     Be the first to leave a review.
                     <ComingSoonModal id="coming-soon" />
                 </div>
@@ -677,10 +654,6 @@ export default function MediaDetailview() {
 
             <MediaCarousel media={similar} title={type == "movie" ? "Similar Movies" : "Similar Shows"} type={type == "movie" ? "movie" : "tv"} />
 
-
-
-
         </div>
     );
-
 }
