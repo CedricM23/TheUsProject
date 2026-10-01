@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 
--- Drop child tables before parent tables to avoid foreign key violation errors
+DROP TABLE IF EXISTS watched;
 DROP TABLE IF EXISTS media_list_items;
 DROP TABLE IF EXISTS media_lists;
 DROP TABLE IF EXISTS dateevents;
@@ -14,6 +14,8 @@ CREATE TABLE users (
     password_hash varchar(200) NOT NULL,
     first_name varchar(50) NOT NULL,
     last_name varchar(50) NOT NULL,
+    email varchar(50) NOT NULL,
+    image_path VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     role varchar(50) NOT NULL,
     CONSTRAINT PK_user PRIMARY KEY (user_id)
@@ -69,6 +71,17 @@ CREATE TABLE media_list_items (
     
     CONSTRAINT FK_media_list_items_list FOREIGN KEY (list_id) REFERENCES media_lists(list_id) ON DELETE CASCADE,
     CONSTRAINT UQ_list_item UNIQUE (list_id, tmdb_media_id, media_type)
+);
+
+CREATE TABLE watched(
+    watched_id Serial primary key,
+    user_id UUID NOT NULL,
+    tmdb_media_id INT NOT NULL,
+    media_type VARCHAR(10) NOT NULL,
+    runtime INT,
+
+  CONSTRAINT FK_watched_user FOREIGN KEY (user_id) REFERENCES users(user_id),
+  CONSTRAINT uc_user_media UNIQUE (user_id, tmdb_media_id, media_type)
 );
 
 COMMIT TRANSACTION;
