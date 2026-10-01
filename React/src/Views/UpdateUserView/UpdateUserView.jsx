@@ -172,17 +172,17 @@ export default function UpdateUserView() {
 
                         {/* Action Buttons */}
                         {/* Main Action Buttons */}
-                        <div className="form-control mt-6 flex flex-row gap-4 justify-center">
+                        <div className="form-control mt-6 flex flex-row gap-4 w-full">
                             <button
                                 type="button"
-                                className="btn btn-ghost w-50"
-                                onClick={() => navigate(-1)} 
+                                className="btn btn-ghost flex-1"
+                                onClick={() => navigate(-1)}
                             >
                                 Cancel
                             </button>
                             <button
                                 type="submit"
-                                className="btn btn-primary w-50"
+                                className="btn btn-primary flex-1"
                                 disabled={isUploading}
                             >
                                 {isUploading ? <span className="loading loading-spinner"></span> : "Save Changes"}
