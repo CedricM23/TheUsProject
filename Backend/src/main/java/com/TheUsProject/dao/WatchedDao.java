@@ -10,14 +10,15 @@ public interface WatchedDao {
     Watched addToWatched(UUID userId, Watched watched);
 
     // // Read
-    // List<Watched> getAllWatchedByUserId(UUID userId);
+    List<Watched> getAllWatchedByUserId(UUID userId);
     Watched getWatchedById(int watchedId);
     Boolean isWatched(UUID userId, int tmdbMediaId, String mediaType);
      
-    // int getTotalWatchedRuntimeByUserId(UUID userId);
+    int getWatchedCountByUserId(UUID userId);
+    int getTotalRuntimeByUserId(UUID userId);
 
     // // Delete
-    // Watched removeFromWatched(UUID userId, int tmdbMediaId, String mediaType); 
+    void removeFromWatched(UUID userId, int tmdbMediaId, String mediaType); 
 
 }
     

@@ -52,9 +52,10 @@ public class JdbcWatchedDao implements WatchedDao {
     // READ
     // ==================
 
+    @Override
     public Watched getWatchedById(int watchedId) {
         Watched watched = null;
-        String sql = "Select watched_id, user_id, tmdb_media_id, media_type, runtime FROM watched where watched_id = ?";
+        String sql = "Select watched_id, user_id, tmdb_media_id, media_type, runtime FROM watched where watched_id = ?;";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, watchedId);
             if (results.next()) {
@@ -66,9 +67,27 @@ public class JdbcWatchedDao implements WatchedDao {
         return watched;
     }
 
-    public Boolean isWatched(UUID userId, int tmdbMediaId, String mediaType){
-         String sql = "SELECT COUNT(*) FROM watched WHERE user_id = ? AND tmdb_media_id = ? AND media_type = ?";
-          try {
+    @Override
+    public List<Watched> getAllWatchedByUserId(UUID userId) {
+        List<Watched> watchedList = new ArrayList<>();
+        String sql = "SELECT watched_id, user_id, tmdb_media_id, media_type, runtime FROM watched WHERE user_id = ?;";
+        
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+            while (results.next()) {
+                watchedList.add(mapRowToWatched(results));
+            }
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        }
+        
+        return watchedList;
+    }
+
+    @Override
+    public Boolean isWatched(UUID userId, int tmdbMediaId, String mediaType) {
+        String sql = "SELECT COUNT(*) FROM watched WHERE user_id = ? AND tmdb_media_id = ? AND media_type = ?;";
+        try {
             Integer count = jdbcTemplate.queryForObject(sql, Integer.class, userId, tmdbMediaId, mediaType);
             return count != null && count > 0;
         } catch (CannotGetJdbcConnectionException e) {
@@ -76,9 +95,35 @@ public class JdbcWatchedDao implements WatchedDao {
         }
     }
 
+    @Override
+    public int getWatchedCountByUserId(UUID userId) {
+        String sql = "SELECT COUNT(*) FROM watched WHERE user_id = ?;";
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, userId);
+        return count != null ? count : 0;
+    }
+
+    @Override
+    public int getTotalRuntimeByUserId(UUID userId) {
+        String sql = "SELECT COALESCE(SUM(runtime), 0) FROM watched WHERE user_id = ?;";
+        Integer totalRuntime = jdbcTemplate.queryForObject(sql, Integer.class, userId);
+        return totalRuntime != null ? totalRuntime : 0;
+    }
+
     // ==================
     // DELETE
     // ==================
+
+    @Override
+    public void removeFromWatched(UUID userId, int tmdbMediaId, String mediaType) {
+        String sql = "DELETE FROM watched WHERE user_id = ? AND tmdb_media_id = ? AND media_type = ?;";
+        try {
+            jdbcTemplate.update(sql, userId, tmdbMediaId, mediaType);
+        } catch (CannotGetJdbcConnectionException e) {
+            throw new DaoException("Unable to connect to server or database", e);
+        } catch (DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+    }
 
     // ==================
     // ROW MAPPER
