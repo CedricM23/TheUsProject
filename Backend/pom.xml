@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.techelevator</groupId>
-    <artifactId>final-capstone-starter</artifactId>
+    <artifactId>TheUsProject</artifactId>
     <version>1.0</version>
 
     <properties>
