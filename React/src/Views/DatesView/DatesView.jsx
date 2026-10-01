@@ -9,8 +9,15 @@ import CreateDateButton from '../../components/CreateDateButton/CreateDateButton
 export default function DatesView() {
     const [dates, setDates] = useState([])
 
+
     useEffect(() => {
-       DatesService.getAllDateEvents().then(response => setDates(response.data))
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'instant'
+        });
+        DatesService.getAllDateEvents().then(response => setDates(response.data))
+
     }, [])
 
     return (

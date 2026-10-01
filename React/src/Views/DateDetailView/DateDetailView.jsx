@@ -11,8 +11,13 @@ export default function DateDetailView() {
     const [scrapbookMode, setScrapbookMode] = useState(false);
     const [date, setDate] = useState({});
 
-
     useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'instant'
+        });
+
         DatesService.getDateEventById(id)
             .then((response) => setDate(response.data))
             .catch((error) => console.error("Error loading date:", error));
@@ -141,7 +146,7 @@ export default function DateDetailView() {
                     </div>
 
                     <aside className="flex justify-between items-center mt-6 px-4">
-                        <div className="flex gap-6">
+                        <div className="flex gap-6 max-md:flex-col">
                             <Link to={`/dates/edit/${id}`} className="text-blue-500 hover:text-blue-400 transition-colors text-lg font-bold">
                                 <FontAwesomeIcon icon={faPen} className="mr-2" />
                                 Update Date
@@ -158,7 +163,7 @@ export default function DateDetailView() {
                     </aside>
                 </div>
             ) : (
-                <div id='Fancy' className="m-10 max-md:m-5">
+                <div id='Fancy' className="m-10 max-md:m-5 mx-auto">
                     <section>
                         <div className="flex flex-col lg:flex-row items-center lg:items-end justify-center lg:justify-end">
                             <div className="hidden lg:flex items-center justify-start flex-1">
@@ -189,7 +194,7 @@ export default function DateDetailView() {
                                 })}
                             </p>
 
-                            <section className="flex flex-col lg:flex-row items-start">
+                            <section className="flex flex-col lg:flex-row items-center lg:items-start">
                                 <div className="text-center m-0 mx-2.5 lg:mx-[10px] rounded-[16px] p-4 shadow-[0_4px_12px_rgba(255,105,180,0.49)] w-full lg:w-auto">
 
                                     {date.song && (
@@ -223,14 +228,14 @@ export default function DateDetailView() {
 
                                 <div className="mx-[15px] lg:mx-[80px] text-xl leading-snug font-['Libre_Baskerville',_serif] flex flex-col justify-start flex-1 mt-8 lg:mt-4">
                                     {date.description?.map((paragraph, key) => (
-                                        <p className="text-left mb-6" key={key}>{paragraph}</p>
+                                        <p className=" lg:text-left mb-6" key={key}>{paragraph}</p>
                                     ))}
                                 </div>
                             </section>
                         </section>
                     </section>
 
-                    <aside className="flex justify-between items-center mt-12 px-4 lg:px-10">
+                    <aside className="flex justify-between items-center mt-12 px-4 lg:px-10 max-md:flex-col gap-2">
                         <div className="flex gap-6">
                             <Link to={`/dates/edit/${id}`} className="text-blue-500 hover:text-blue-400 transition-colors text-lg font-bold">
                                 <FontAwesomeIcon icon={faPen} className="mr-2" />

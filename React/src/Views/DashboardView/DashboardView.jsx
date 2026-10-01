@@ -4,6 +4,7 @@ import DateCarousel from "../../components/DateCarousel/DateCarousel"
 import DatesService from "../../services/DatesService"
 import MediaCarousel from "../../components/MediaCarousel/MediaCarousel"
 import CreateDateButton from "../../components/CreateDateButton/CreateDateButton"
+import WatchedHero from "../../components/WatchedHero/WatchedHero"
 
 export default function DashboardView() {
     // Test - This page will start with dates then cascade with recommended moveis, popular, and more
@@ -19,6 +20,11 @@ export default function DashboardView() {
 
 
     useEffect(() => {
+         window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'instant'
+        });
         ShowService.getPopularMovies().then(
             (Response) => {
                 SetPopularMovies(Response.data.results);
@@ -64,13 +70,20 @@ export default function DashboardView() {
     }, [])
 
     return (
+
+
+
         <div className="m-5 text-white flex flex-col gap-5">
+
+            <WatchedHero />
+
+            
             {dates && dates.length > 0 ? (
                 <DateCarousel dates={dates} />
             ) : (
                 <div className="flex justify-center items-center p-8 mt-8 flex-col gap-4">
                     <p className="text-xl font-['Libre_Baskerville',_serif] text-gray-500">
-                        Save a date 
+                        Save a date
                     </p>
                     <CreateDateButton />
                 </div>

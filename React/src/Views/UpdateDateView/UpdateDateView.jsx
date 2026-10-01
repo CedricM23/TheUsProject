@@ -20,6 +20,11 @@ export default function UpdateDateView() {
     });
 
     useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'instant'
+        });
         DatesService.getDateEventById(id)
             .then((response) => {
                 const data = response.data;
@@ -45,10 +50,10 @@ export default function UpdateDateView() {
             });
             autocomplete.addListener("place_changed", () => {
                 const place = autocomplete.getPlace();
-                const addressString = place.name && place.formatted_address 
-                    ? `${place.name}, ${place.formatted_address}` 
+                const addressString = place.name && place.formatted_address
+                    ? `${place.name}, ${place.formatted_address}`
                     : place.formatted_address || place.name;
-                
+
                 setFormData(prev => ({
                     ...prev,
                     location: addressString || ""
