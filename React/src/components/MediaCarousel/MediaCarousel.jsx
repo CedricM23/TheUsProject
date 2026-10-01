@@ -68,8 +68,7 @@ export default function MediaCarousel({ media, title, type }) {
     return (
         <div className="w-full">
             <div className="flex justify-between items-center mb-4 px-4">
-                <div>
-                    <h1 className="text-3xl font-bold max-md:text-center">{title}</h1>
+                    <h1 className="text-3xl font-bold">{title}</h1>
                     <div className="md:hidden flex justify-center mt-2">
                         {media.listId ? (
                             <button
@@ -79,7 +78,6 @@ export default function MediaCarousel({ media, title, type }) {
                                 <FontAwesomeIcon icon={faTrash} />
                             </button>
                         ) : null}
-                    </div>
                 </div>
 
 
