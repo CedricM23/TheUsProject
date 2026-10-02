@@ -18,7 +18,9 @@ export default {
   },
     updateUser(userId, userData) {
     return axios.post(`api/users/${userId}/update`, userData);
+  },
+  statuscheck(){
+    return axios.get('/health')
   }
-
 
 }
