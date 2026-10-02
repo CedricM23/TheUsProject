@@ -40,7 +40,6 @@ export default function Navbar({ name }) {
                             <li><Link to="/favorites">Favorites</Link></li>
                             <li><Link to="/lists">Your Lists</Link></li>
                             <li><Link to="/watchlist">Watchlist</Link></li>
-                            <li><Link to=''>About Us</Link></li>
                         </ul>
                     </div>
                     <Link to="/" className="btn btn-ghost text-xl">{user ? name : "TheUsProject"}</Link>
@@ -67,7 +66,6 @@ export default function Navbar({ name }) {
                                 </ul>
                             </details>
                         </li>
-                        <li><Link to=''>About Us</Link></li>
                     </ul>
                 </div>
 
