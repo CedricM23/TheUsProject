@@ -10,11 +10,11 @@ import MarkAsWatched from '../../components/MarkAsWatched/MarkAsWatched'
 export default function MediaCard({ movie, mediaType, listId }) {
     const [newListName, setNewListName] = useState("");
     const [heart, setHeart] = useState(Unliked);
-    const [lists, SetLists] = useState([]);
+    const [lists, setLists] = useState([]);
     const modalRef = useRef(null);
 
     useEffect(() => {
-        ListService.getMyLists().then(response => SetLists(response.data));
+        ListService.getMyLists().then(response => setLists(response.data));
 
         FavoriteService.checkFavorite(movie.id, movie.media_type || mediaType)
             .then((response) => {
@@ -73,11 +73,14 @@ export default function MediaCard({ movie, mediaType, listId }) {
 
         ListService.createList(newListName)
             .then((response) => {
-                SetLists([...lists, response.data]);
+                setLists([...lists, response.data]);
                 setNewListName("");
 
+                // Use the ref to close the modal safely
                 if (modalRef.current) {
                     modalRef.current.hidePopover();
+                } else {
+                    document.getElementById(`modal-${id}`).hidePopover();
                 }
 
                 alert("List created successfully!");
@@ -177,6 +180,7 @@ export default function MediaCard({ movie, mediaType, listId }) {
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 if (modalRef.current) modalRef.current.showPopover();
+                                                document.getElementById(`modal`).showPopover();
                                             }}
                                         >
                                             <FontAwesomeIcon icon={faPlus} />
@@ -184,6 +188,53 @@ export default function MediaCard({ movie, mediaType, listId }) {
                                         </button>
                                     </li>
                                 </ul>
+                            </div>
+
+                            <div className="modal" id={`modal`} popover="auto">
+                                <div className="modal-box bg-base-100 shadow-xl overflow-hidden relative z-50">
+
+                                    <h3 className="font-bold text-lg mb-4">Create a New List</h3>
+
+                                    <form>
+                                        <input
+                                            type="text"
+                                            placeholder="E.g., Halloween Marathon 🎃"
+                                            className="input input-bordered w-full mb-6"
+                                            value={newListName}
+                                            onChange={(e) => setNewListName(e.target.value)}
+                                            required
+                                        />
+
+                                        <div className="flex justify-end gap-2">
+                                            <button
+                                                type="button"
+                                                className="btn"
+                                                onClick={() => {
+                                                    setNewListName("");
+                                                    document.getElementById(`modal`).hidePopover();
+                                                }}
+                                            >
+                                                Cancel
+                                            </button>
+                                            <button type="submit" className="btn btn-primary" onClick={handleCreateList}>
+                                                Create
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                </div>
+
+                                <div className="modal-backdrop fixed inset-0 bg-black/85 z-40">
+                                    <button
+                                        className="w-full h-full cursor-default text-transparent"
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            document.getElementById(`modal`).hidePopover();
+                                        }}
+                                    >
+                                        close
+                                    </button>
+                                </div>
                             </div>
 
                             {/* END MODAL CODE (Keep your modal code here exactly as it is) */}
