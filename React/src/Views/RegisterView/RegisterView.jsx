@@ -14,7 +14,7 @@ export default function RegisterView() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  
+
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
 
@@ -41,7 +41,7 @@ export default function RegisterView() {
       const formData = new FormData();
       formData.append('file', imageFile);
       // TODO: Replace with my Cloudinary upload preset and cloud name
-      formData.append('upload_preset', 'YOUR_UPLOAD_PRESET_HERE'); 
+      formData.append('upload_preset', 'YOUR_UPLOAD_PRESET_HERE');
 
       try {
         // TODO: Replace 'CLOUD_NAME_HERE' with actual cloud name
@@ -49,9 +49,9 @@ export default function RegisterView() {
           method: 'POST',
           body: formData,
         });
-        
+
         const data = await response.json();
-        
+
         if (data.secure_url) {
           uploadedImagePath = data.secure_url;
         } else {
@@ -64,17 +64,17 @@ export default function RegisterView() {
       }
     }
 
-    AuthService.register({ 
-        firstName, 
-        lastName, 
-        email, 
-        username, 
-        password, 
-        confirmPassword,
-        role: 'USER',
-        // Because uploadedImagePath is null if it fails (or if they didn't upload one), 
-        // it will automatically use this default image!
-        imagePath: uploadedImagePath || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+    AuthService.register({
+      firstName,
+      lastName,
+      email,
+      username,
+      password,
+      confirmPassword,
+      role: 'USER',
+      // Because uploadedImagePath is null if it fails (or if they didn't upload one), 
+      // it will automatically use this default image!
+      imagePath: uploadedImagePath || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
     })
       .then(() => {
         setIsUploading(false);
@@ -92,25 +92,32 @@ export default function RegisterView() {
       <div className="card bg-base-100 shadow-xl border border-zinc-800">
         <div className="card-body">
           <h2 className="card-title text-3xl font-bold mb-2 justify-center">Join Us</h2>
-          
+
           <p className="text-center text-sm mb-6">
             Create an account to start building your digital scrapbook.
           </p>
 
           <Notification notification={notification} clearNotification={() => setNotification(null)} />
 
+          <div role="alert" className="alert alert-warning">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span>Warning: Account image upload does not currently work! A default image will be added</span>
+          </div>
+
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full">
-            
+
             {/* Profile Picture Upload */}
             <div className="flex flex-col items-center justify-center w-full mb-2">
               <div className="relative w-24 h-24 rounded-full border-2 border-dashed border-zinc-500 bg-base-200 flex items-center justify-center overflow-hidden hover:bg-base-300 transition-colors cursor-pointer shadow-sm group">
                 {imagePreview ? (
                   <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
                 ) : (
-                  <span className="text-zinc-400 text-xs text-center font-semibold group-hover:text-zinc-300">Add<br/>Photo</span>
+                  <span className="text-zinc-400 text-xs text-center font-semibold group-hover:text-zinc-300">Add<br />Photo</span>
                 )}
-                <input 
-                  type="file" 
+                <input
+                  type="file"
                   accept="image/*"
                   onChange={handleImageChange}
                   className="absolute inset-0 opacity-0 cursor-pointer"
@@ -207,8 +214,8 @@ export default function RegisterView() {
 
             {/* Submit Button */}
             <div className="form-control mt-6">
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 disabled={isUploading}
                 className="btn btn-primary w-full"
               >
@@ -219,7 +226,7 @@ export default function RegisterView() {
                 )}
               </button>
             </div>
-            
+
           </form>
 
           <div className="mt-4 text-center">
