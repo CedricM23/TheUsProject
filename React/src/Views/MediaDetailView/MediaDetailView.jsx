@@ -42,15 +42,17 @@ export default function MediaDetailview() {
 
     function handleClick(e) {
         if (heart === Unliked) {
+             setHeart(Liked);
             FavoriteService.addFavorite(id, type).then(
                 (repsonse) => {
-                    setHeart(Liked);
+                   console.log("liked")
                 }
             ).catch((error) => { alert("item was not added to your favorites") })
         } else if (heart === Liked) {
+             setHeart(Unliked);
             FavoriteService.removeFavorite(id, type).then(
                 (repsonse) => {
-                    setHeart(Unliked);
+                     console.log("Unliked")
                 }
             ).catch((error) => { alert("item was not removed from your favorites") })
         }
@@ -360,7 +362,7 @@ export default function MediaDetailview() {
 
 
 
-                            <button className="flex items-center gap-2 bg-zinc-900/60 backdrop-blur-md text-white px-8 py-3 rounded-full font-bold hover:bg-zinc-800 transition-colors border border-zinc-700 shadow-lg">
+                            <button className="flex items-center gap-2 bg-zinc-900/60 backdrop-blur-md text-white px-8 py-3 rounded-full font-bold hover:bg-zinc-800 transition-colors border border-zinc-700 shadow-lg"  onClick={() => document.getElementById('coming-soon').showPopover()}>
                                 ▤ Gallery ({images?.length || 0})
                             </button>
                         </div>
