@@ -39,7 +39,7 @@ const MainLayout = () => {
 
 function App() {
   // 1. Synchronously load the user from local storage FIRST
-  const [statusMessage, setStatusMessage] = useState("")
+  const [statusMessage, setStatusMessage] = useState(false)
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem('user');
     const token = localStorage.getItem('token');
@@ -51,16 +51,19 @@ function App() {
     return null;
   });
 
-  // 2. Validate the token in the background using useEffect
   useEffect(() => {
+    AuthService.statuscheck()
+      .then((response) => {
+        if (response == null) {
+          setStatusMessage(true)
+        }
+      })
+
     if (user) {
       AuthService.getUserProfile(user.id)
         .then(() => {
-          // Token is valid, do nothing
         })
         .catch((error) => {
-          // Only log the user out if the token is explicitly rejected (401)
-          // This prevents CORS or server downtime from wiping your local storage
           if (error.response && error.response.status === 401) {
             handleLogout();
           } else {
@@ -68,7 +71,7 @@ function App() {
           }
         });
     }
-  }, []); // The empty array ensures this check only runs once when the app mounts
+  }, []);
 
   function handleLogin(userData) {
     setUser(userData);
@@ -85,18 +88,26 @@ function App() {
     <>
       <title>TheUsProject</title>
       <BrowserRouter>
+        {statusMessage &&
+          <div role="alert" className="alert alert-error">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Error! Server is down for maintenance.</span>
+          </div>
+        }
         <UserContext.Provider value={user}>
           <Routes>
 
             <Route path='/welcome' element={user ? <Navigate to="/" /> : <WelcomePage />} />
             <Route path="/login" element={<LoginView onLogin={handleLogin} />} />
             <Route path='/signup' element={<RegisterView />} />
-              <Route path='/aboutus' element={<AboutUsView/>} />
-              <Route path='/access-denied' element={<ForbiddenPage />} />
+            <Route path='/aboutus' element={<AboutUsView />} />
+            <Route path='/access-denied' element={<ForbiddenPage />} />
 
             <Route element={<MainLayout />}>
 
-          
+
               <Route path='/' element={user ? <DashboardView /> : <Navigate to="/welcome" />} />
 
               <Route path='/dates' element={<ProtectedRoute><DatesView /></ProtectedRoute>} />
@@ -111,8 +122,8 @@ function App() {
               <Route path='/dates/edit/:id' element={<UpdateDateView />} />
               <Route path='/profile' element={<ProfileView />} />
               <Route path='/user/update' element={<UpdateUserView />} />
-              <Route path='/admin' element={<AdminDashboardView/>} />
-              <Route path='/preferences' element={<EditPreferencesView/>} />
+              <Route path='/admin' element={<AdminDashboardView />} />
+              <Route path='/preferences' element={<EditPreferencesView />} />
             </Route>
 
           </Routes>
