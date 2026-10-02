@@ -60,14 +60,16 @@ export default function MediaDetailview() {
 
     function handleBookmark() {
         if (bookmark == Unsaved) {
+            setBookmark(Saved)
             BookmarkService.addBookmark(id, type).then(
                 (response) => {
-                    setBookmark(Saved)
+                    console.log("bookmarked")
                 }).catch((error) => { alert("item was not added to your Watchlist") })
         } else if (bookmark == Saved) {
+               setBookmark(Unsaved)
             BookmarkService.removeBookmark(id, type).then(
                 (response) => {
-                    setBookmark(Unsaved)
+                 console.log("Unbookmarked")
                 }).catch((error) => { alert("item was not removed from your Watchlist") })
         }
     }
@@ -491,6 +493,21 @@ export default function MediaDetailview() {
                                     </div>
                                 ))}
                             </div>
+
+                            <div className="flex items-center justify-center gap-1.5 opacity-60 hover:opacity-100 transition-opacity mt-2">
+                                <span className="text-[10px] text-zinc-400 font-medium tracking-wide uppercase">
+                                    Data provided by
+                                </span>
+                                <a href="https://www.justwatch.com" target="_blank" rel="noopener noreferrer">
+                                    <img 
+                                        src="https://www.themoviedb.org/assets/2/v4/logos/justwatch-c2e58adf5809b6871db650fb74b43db2b8f3637fe3709262572553fa056d8d0a.svg" 
+                                        alt="JustWatch" 
+                                        className="h-[10px]" 
+                                    />
+                                </a>
+                            
+                            </div>
+
                         </div>
                     )}
                 </div>
