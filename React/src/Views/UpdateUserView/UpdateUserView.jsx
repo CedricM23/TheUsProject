@@ -204,10 +204,10 @@ export default function UpdateUserView() {
                         <div className="flex flex-col gap-2">
                             <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider">Danger Zone</span>
                             <button
-                                type="button" // Use type="button" so it doesn't accidentally submit the form
+                                type="button"
                                 onClick={() => {
                                     if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-                                        // TODO: Call your delete account service here
+                                        //TODO: CREATE SERVICE CALL
                                     }
                                 }}
                                 className="btn btn-error btn-outline w-full"
