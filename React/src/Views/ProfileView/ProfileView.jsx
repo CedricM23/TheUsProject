@@ -4,11 +4,12 @@ import { UserContext } from "../../context/UserContext";
 import DatesService from "../../services/DatesService";
 import ListService from "../../services/ListService";
 import FavoriteService from "../../services/FavoriteService";
-import NumberFlow from '@number-flow/react'; 
+import NumberFlow from '@number-flow/react';
+import ComingSoonModal from "../../components/ComingSoonModal/ComingSoonModal";
 
 export default function ProfileView() {
-    const user = useContext(UserContext); 
-    
+    const user = useContext(UserContext);
+
     const [dates, setDates] = useState([]);
     const [lists, setLists] = useState([]);
     const [favorites, setFavorites] = useState([]);
@@ -68,7 +69,9 @@ export default function ProfileView() {
 
                     <div className="card-actions mt-8 w-full flex-col gap-3">
                         <Link to='/user/update' className="btn btn-primary w-full">Edit Profile</Link>
-                        <Link to='/preferences' className="btn btn-primary w-full">Edit Preferences</Link>
+                        <Link to='' className="btn btn-primary w-full"
+                            onClick={() => document.getElementById('coming-soon').showPopover()}>
+                            Edit Preferences</Link>
                         {user?.authorities?.some(auth => auth.name.includes("ADMIN")) && (
                             <Link to='/admin' className="btn btn-primary w-full">Admin Settings</Link>
                         )}
@@ -77,6 +80,7 @@ export default function ProfileView() {
 
                 </div>
             </div>
+               <ComingSoonModal id="coming-soon" />
         </div>
     );
 }
