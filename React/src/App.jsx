@@ -55,9 +55,13 @@ function App() {
     AuthService.statuscheck()
       .then((response) => {
         if (response == null) {
-          setStatusMessage(true)
+          setStatusMessage(true);
+          console.log(statusMessage)
         }
       })
+      .catch((error) => {
+        setStatusMessage(true);
+      });
 
     if (user) {
       AuthService.getUserProfile(user.id)
