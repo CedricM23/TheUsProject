@@ -72,9 +72,7 @@ export default function RegisterView() {
       password,
       confirmPassword,
       role: 'USER',
-      // Because uploadedImagePath is null if it fails (or if they didn't upload one), 
-      // it will automatically use this default image!
-      imagePath: uploadedImagePath || "https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+      imagePath: uploadedImagePath || "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original$0"
     })
       .then(() => {
         setIsUploading(false);
