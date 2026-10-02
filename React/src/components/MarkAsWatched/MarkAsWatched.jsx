@@ -17,23 +17,25 @@ export default function MarkAsWatched({ mediaId, type, runtime }) {
                 }
             }
             )
-    }, [isWatched])
+    }, [])
 
     const handleClick = () => {
 
         if (isWatched == false) {
+            setIsWatched(true)
             WatchedService.addToWatched(mediaId, type, runtime)
                 .then(response => {
-                    setIsWatched(true)
+                    console.log("you've watched this")
                 })
                 .catch((error) => {
                     alert("Item is already marked as watched or could not be added.");
                     console.error("Failed to add to watched", error);
                 });
         } else {
+            setIsWatched(false)
             WatchedService.removeWatched(mediaId, type)
                 .then(response => {
-                    setIsWatched(false)
+                    console.log("you haven't watched this")
                 })
                 .catch((error) => {
                     alert("Item was not removed from watched");
