@@ -105,11 +105,19 @@ export default function UpdateUserView() {
                 <div className="card-body">
                     <h2 className="card-title text-3xl font-bold mb-6">Update Profile</h2>
 
+                    <div role="alert" className="alert alert-warning">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <span>Warning: Account image updating does not currently work!</span>
+                    </div>
+
                     {notification && (
                         <div className={`p-4 rounded-xl mb-4 text-sm font-bold ${notification.type === 'error' ? 'bg-red-900/20 text-red-400 border border-red-900/50' : 'bg-green-900/20 text-green-400 border border-green-900/50'}`}>
                             {notification.message}
                         </div>
                     )}
+
 
                     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
